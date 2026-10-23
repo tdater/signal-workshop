@@ -1,0 +1,130 @@
+---
+import type { Project } from '../lib/content';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+const key = `sw-trail-${project.slug}`;
+---
+
+<div class="trail" data-trail={key}>
+  <p class="hint trail__intro">
+    Tick steps off as you go. Progress is saved in this browser only, when your browser allows it.
+    Nothing here checks your device. The ticks only mean you said so.
+  </p>
+  <ol class="trail__list trace">
+    {project.setupTrail.map((s, i) => (
+      <li class="trace__node trail__step">
+        <label class="check trail__check">
+          <input type="checkbox" name={s.id} data-step={s.id} />
+          <span class="trail__title">
+            <span class="mono trail__num">{String(i + 1).padStart(2, '0')}</span> {s.title}
+          </span>
+        </label>
+        <p class="trail__detail">{s.detail}</p>
+        {s.guide && (
+          <a class="trail__guide" href={`/guides/${s.guide}`}>
+            Detailed steps
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+  <div class="meta-row">
+    <p class="trail__progress mono" aria-live="polite" data-progress></p>
+    <button type="button" class="btn btn--small" data-reset hidden>
+      Reset checklist
+    </button>
+  </div>
+  <p class="hint" data-storage-note hidden>
+    This browser isn't saving progress, so the ticks reset when you leave the page.
+  </p>
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-trail]')) {
+    const key = root.dataset.trail!;
+    const boxes = [...root.querySelectorAll<HTMLInputElement>('input[data-step]')];
+    const progress = root.querySelector<HTMLElement>('[data-progress]')!;
+    const reset = root.querySelector<HTMLButtonElement>('[data-reset]')!;
+    let store: Storage | null = null;
+    try {
+      localStorage.setItem('sw-probe', '1');
+      localStorage.removeItem('sw-probe');
+      store = localStorage;
+    } catch {
+      root.querySelector<HTMLElement>('[data-storage-note]')!.hidden = false;
+    }
+    let saved: string[] = [];
+    try {
+      saved = JSON.parse(store?.getItem(key) ?? '[]');
+      if (!Array.isArray(saved)) saved = [];
+    } catch {
+      saved = [];
+    }
+    const update = () => {
+      const done = boxes.filter((b) => b.checked).map((b) => b.dataset.step!);
+      progress.textContent = `${done.length} of ${boxes.length} steps ticked`;
+      try {
+        store?.setItem(key, JSON.stringify(done));
+      } catch {
+        /* quota or blocked; progress just won't persist */
+      }
+    };
+    boxes.forEach((b) => {
+      b.checked = saved.includes(b.dataset.step!);
+      b.addEventListener('change', update);
+    });
+    reset.hidden = false;
+    reset.addEventListener('click', () => {
+      boxes.forEach((b) => (b.checked = false));
+      update();
+      boxes[0]?.focus();
+    });
+    update();
+  }
+</script>
+
+<style>
+  .trail__list {
+    list-style: none;
+    margin: var(--space-5) 0;
+  }
+  .trail__check {
+    align-items: flex-start;
+    cursor: pointer;
+  }
+  .trail__check input {
+    margin-top: 0.2rem;
+    flex: none;
+  }
+  .trail__title {
+    font-weight: 700;
+    font-size: var(--step-1);
+    font-family: var(--font-display);
+  }
+  .trail__num {
+    color: var(--accent);
+    font-size: 0.75em;
+  }
+  .trail__detail {
+    color: var(--text-2);
+    margin: var(--space-1) 0 var(--space-2) 2rem;
+  }
+  .trail__guide {
+    margin-left: 2rem;
+    display: inline-flex;
+    min-height: var(--target);
+    align-items: center;
+  }
+  .trail__step:has(input:checked) .trail__title {
+    color: var(--text-2);
+    text-decoration: line-through;
+    text-decoration-color: var(--accent);
+  }
+  .trail__progress {
+    margin: 0;
+    color: var(--text-2);
+  }
+</style>

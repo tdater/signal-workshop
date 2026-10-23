@@ -1,0 +1,222 @@
+slug: retrotv
+title: RetroTV
+tagline: Retro games on an Android TV without setting up emulators. It's a TV browser built for the sites that run classic games in the page.
+published: true
+order: 2
+state: released
+stateNote: Version 1.2. Shared as-is by one person, so no warranty and no support contract.
+accent: '#ff4fd8'
+motif: crt
+icon:
+  src: /media/icons/retrotv.png
+  alt: RetroTV app icon
+category: [Games, TV, Android]
+platforms: [Android TV, Google TV, Fire TV]
+tags: [tv, games, controllers, browser, ad-blocking, phone-link]
+summary: >-
+  RetroTV is an Android TV browser built around in-browser emulation sites. It gives the remote a
+  real pointer, passes game controllers straight to the game, blocks pop-ups and redirects
+  without breaking game files, and takes over EmulatorJS games in its own full-screen player
+  with save slots, rewind and cheats. It contains no games, ROMs or BIOS files.
+audience:
+  - Anyone with an Android TV, Google TV or Fire TV who wants to play classic games from the couch.
+  - People who tried a phone browser on a TV and gave up when the remote couldn't click anything.
+problem: >-
+  Web emulator sites expect a mouse and keyboard, and they fight you with pop-unders and
+  "click anywhere" redirects. On a TV remote they're close to unusable. RetroTV handles the parts
+  a phone browser gets wrong on a TV: a pointer for the remote, controllers that actually reach the
+  game, ads that don't hijack the screen, and full screen that really fills the TV.
+why: >-
+  Many game sites run their games in EmulatorJS, and their pages often stall waiting on ads. Each
+  release since v1.0 has tackled one of those frustrations: a built-in player in v1.1 that keeps
+  the site as the catalogue and runs the game cleanly, then a library, phone link and save sync in
+  v1.2.
+story:
+  - date: '2026-10-19'
+    title: v1.0, a TV browser for game sites
+    body: >-
+      16 built-in game sites, a remote pointer and D-pad mode, gamepad and keyboard controller
+      modes, Focus game, ad and redirect blocking, per-site views, installable site apps,
+      userscripts and emulator downloads.
+    evidence: GitHub release v1.0 and the published features page
+  - date: '2026-10-19'
+    title: v1.1, take the game away from the ads
+    body: >-
+      When a site starts an EmulatorJS game, RetroTV now plays it in its own full-screen player.
+      Ad scripts get harmless stand-ins, so games that used to hang waiting on blocked ads start.
+    evidence: v1.1 release notes
+  - date: '2026-10-19'
+    title: v1.2, built in five planned phases
+    body: >-
+      The library with box art, phone as a controller over Wi-Fi, sending ROMs from the phone,
+      save sync between two TVs, rewind, filters, cheats and attract mode. Each phase was planned
+      and tested first (the release notes list each red test before its fix).
+    evidence: v1.2 release notes
+capabilities:
+  - group: Remote and controllers
+    items:
+      - The D-pad moves an on-screen pointer that speeds up while held. OK clicks, and holding OK drags.
+      - Play/Pause switches to D-pad keys, so you can play with only the remote.
+      - Auto controller mode acts as a gamepad or as keys, decided press by press. Up to four controllers.
+      - Gamepad API in every frame, even on TVs whose WebView doesn't support gamepads.
+  - group: Built-in player
+    items:
+      - Takes over EmulatorJS games in full screen. The site stays your catalogue.
+      - Four save slots with screenshots, rewind, fast-forward, CRT/LCD filters and cheats.
+      - Game files are kept on the TV, and cached cores allow offline play.
+  - group: Sites and blocking
+    items:
+      - 16 built-in game sites, plus any site you add.
+      - Blocks ad servers, pop-under networks and redirects, but never game files or emulator code.
+      - Blocking can be turned off per site, and blocked pop-ups wait in the menu.
+      - Install any built-in site as its own TV app tile with sandboxed sign-ins.
+  - group: Library and phone link
+    items:
+      - My games library with box art, play time and favourites.
+      - Scan a QR code on the TV and a phone on the same Wi-Fi becomes a controller. No app needed.
+      - Send ROMs from the phone, back up to the phone, and sync saves between two RetroTVs.
+integrations:
+  - name: EmulatorJS
+    note: The built-in player for games that sites serve through EmulatorJS.
+  - name: libretro thumbnails
+    note: Box art for the library.
+  - name: Greasy Fork
+    note: Optional userscript search and install.
+requirements:
+  - label: Android
+    value: 7.0 or newer (minSdk 24)
+  - label: Device
+    value: Android TV, Google TV or Fire TV. A touchscreen isn't required.
+  - label: Input
+    value: The TV remote works. A Bluetooth or USB game controller is recommended, and a phone on the same Wi-Fi can join as a controller.
+  - label: Network
+    value: Internet for the game sites. Cached games can play offline once their emulator cores are downloaded.
+  - label: Games
+    value: None included. You're responsible for only playing games you have the right to play.
+permissions:
+  - name: Internet and network state
+    why: Opens game sites and checks whether they're up.
+  - name: Install unknown apps
+    why: Installs emulator apps you choose to download from inside RetroTV. It asks once.
+limitations:
+  - Not on the Play Store. You install it from the APK.
+  - No support and no warranty. It's a personal project shared as-is.
+  - The game sites are independent third-party websites. What's available, and legal to play, depends on each site and where you live.
+  - Games run on the TV's Android System WebView. If games stutter, update WebView from the Play Store.
+  - No in-app screenshots of RetroTV are published yet. The images here are the real app-tile banners it installs.
+mediaNote: >-
+  These are the real TV-home-screen banners RetroTV creates when you install a built-in site as
+  its own app. No screenshots of the RetroTV interface have been published yet, so none are shown.
+media:
+  - {
+      kind: banner,
+      src: /media/retrotv/banner.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'RetroTV app banner',
+      caption: RetroTV's own banner,
+    }
+  - {
+      kind: banner,
+      src: /media/retrotv/banner_retrogames_cc.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'RetroGames.cc site app banner',
+      caption: RetroGames.cc as its own app,
+    }
+  - {
+      kind: banner,
+      src: /media/retrotv/banner_internetarcade.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'Internet Arcade site app banner',
+      caption: Internet Arcade,
+    }
+  - {
+      kind: banner,
+      src: /media/retrotv/banner_webrcade.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'webRcade site app banner',
+      caption: webЯcade,
+    }
+  - {
+      kind: banner,
+      src: /media/retrotv/banner_msdos.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'MS-DOS Games site app banner',
+      caption: MS-DOS Library,
+    }
+  - {
+      kind: banner,
+      src: /media/retrotv/banner_classicreload.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'ClassicReload site app banner',
+      caption: ClassicReload,
+    }
+  - {
+      kind: banner,
+      src: /media/retrotv/banner_playclassic.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'PlayClassic site app banner',
+      caption: PlayClassic,
+    }
+  - {
+      kind: banner,
+      src: /media/retrotv/banner_free80sarcade.png,
+      width: 320,
+      height: 180,
+      group: App tiles,
+      alt: 'Free 80s Arcade site app banner',
+      caption: Free 80s Arcade,
+    }
+setupTrail:
+  - {
+      id: downloader,
+      title: Install Downloader on the TV,
+      detail: 'The free Downloader app (AFTVnews), from the Play Store or the Amazon Appstore.',
+      guide: install-retrotv,
+    }
+  - {
+      id: allow,
+      title: Allow Downloader to install apps,
+      detail: 'Google TV asks during the install. On Fire TV, turn on Install unknown apps for Downloader in Developer options first.',
+      guide: install-retrotv,
+    }
+  - {
+      id: download,
+      title: Download and install the APK,
+      detail: 'Enter the download link in Downloader (or scan the QR code on this page with your phone to read the link), then press Install.',
+      guide: install-retrotv,
+    }
+  - {
+      id: controller,
+      title: Pair a controller (optional),
+      detail: "Pair it in the TV's Bluetooth settings. RetroTV's Auto mode handles both gamepad and keyboard games.",
+      guide: retrotv-controllers,
+    }
+  - {
+      id: final-test,
+      title: Final test,
+      detail: 'Open a built-in site, start a game and confirm your controller moves player 1. Only you can confirm this one.',
+    }
+support: >-
+  No formal support, and the app README says bug reports aren't taken. Respectful feedback and
+  ideas are still welcome through the feedback form.
+internal:
+  sources:
+    - RetroTV-releases README and features page, commit 61bdadd
+    - RetroTV README and AndroidManifest.xml
+    - GitHub releases API
+  verified: '2026-10-23'
+  notes: No app UI screenshots exist in the published page. Ask Travis for real TV captures.

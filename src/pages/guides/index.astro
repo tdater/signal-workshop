@@ -1,0 +1,122 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getGuides, getProjects, formatDate } from '../../lib/content';
+
+const guides = await getGuides();
+const projects = await getProjects();
+const titleOf = (slug?: string) => projects.find((p) => p.slug === slug)?.title ?? 'All projects';
+const groups = [...new Set(guides.map((g) => g.project ?? ''))];
+const topics = [...new Set(guides.flatMap((g) => g.topics))].sort();
+---
+
+<Base
+  title="Guides"
+  current="/guides"
+  description="Setup, pairing, controller and troubleshooting guides for KITT Launcher, RetroTV and BLACKBOX."
+>
+  <div class="wrap section">
+    <p class="eyebrow">Guides</p>
+    <h1>Guides</h1>
+    <p class="lede">
+      Step-by-step instructions with the prerequisites, what you should see after each step, and
+      what to try when you don't. Each guide says which version it was checked against.
+    </p>
+    <div class="topic-filter" data-topic-filter hidden>
+      <p class="mono hint">Filter by topic</p>
+      <ul class="chips">
+        {topics.map((t) => (
+          <li>
+            <button type="button" class="chip" aria-pressed="false" data-topic={t}>
+              {t}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+    {groups.map((g) => (
+      <section class="gsec" aria-labelledby={`g-${g || 'general'}`}>
+        <h2 id={`g-${g || 'general'}`}>{g ? titleOf(g) : 'For every download'}</h2>
+        <ul class="glist">
+          {guides
+            .filter((x) => (x.project ?? '') === g)
+            .map((x) => (
+              <li
+                class="gitem"
+                data-topics={x.topics.join('|')}
+                style={`--accent:${projects.find((p) => p.slug === x.project)?.accent ?? 'var(--signal)'}`}
+              >
+                <h3>
+                  <a href={`/guides/${x.slug}`}>{x.title}</a>
+                </h3>
+                <p>{x.summary}</p>
+                <p class="mono hint">
+                  {x.appliesTo} · {x.time ?? 'Short'} · reviewed {formatDate(x.reviewed)}
+                </p>
+                <ul class="chips">
+                  {x.topics.map((t) => (
+                    <li class="badge">{t}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-topic-filter]');
+  if (root) {
+    root.hidden = false;
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-topic]')];
+    const items = [...document.querySelectorAll<HTMLElement>('.gitem')];
+    const apply = () => {
+      const on = chips
+        .filter((c) => c.getAttribute('aria-pressed') === 'true')
+        .map((c) => c.dataset.topic!);
+      for (const it of items)
+        it.hidden = on.length > 0 && !on.some((t) => it.dataset.topics!.split('|').includes(t));
+      for (const sec of document.querySelectorAll<HTMLElement>('.gsec'))
+        sec.hidden = [...sec.querySelectorAll<HTMLElement>('.gitem')].every((i) => i.hidden);
+    };
+    chips.forEach((c) =>
+      c.addEventListener('click', () => {
+        c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'));
+        apply();
+      }),
+    );
+  }
+</script>
+
+<style>
+  .topic-filter {
+    margin: var(--space-5) 0;
+  }
+  .gsec {
+    margin-top: var(--space-7);
+  }
+  .gsec h2 {
+    font-size: var(--step-2);
+  }
+  .glist {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  }
+  .gitem {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-s);
+    padding: var(--space-5);
+  }
+  .gitem p {
+    color: var(--text-2);
+  }
+  .gitem .chips {
+    gap: var(--space-1);
+  }
+</style>

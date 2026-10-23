@@ -1,0 +1,169 @@
+- id: which-kitt-edition
+  question: Which KITT Launcher edition should I download?
+  answer: >-
+    KITT Launcher is laid out for big portrait screens (11 to 13 inch, Tesla-style). KITT
+    Launcher.2 is for 7 to 10 inch landscape screens (1024×600, 1280×720, 1280×800) and budget
+    head units. Features are identical, and since 1.8 both build from the same code. They have
+    different app IDs, so you can install both and keep the one that fits.
+  projects: [kitt-launcher]
+  topics: [Compatibility, Installation]
+  links: [{ label: Install guide, href: /guides/install-kitt-launcher }]
+  reviewed: '2026-10-23'
+  published: true
+- id: kitt-needs-subscription
+  question: Do I have to pay for anything to use KITT Launcher?
+  answer: >-
+    The app is free. The AI answers need your own Gemini or Perplexity API key, and that
+    provider may charge for usage. A consumer chat subscription isn't API access. Maps, routing,
+    weather and the offline voice need no account. An OBD-II adapter is a one-off hardware
+    purchase if you want the scanner.
+  projects: [kitt-launcher]
+  topics: [AI, Requirements]
+  links: [{ label: Set up KITT's AI, href: /guides/set-up-kitt-ai }]
+  reviewed: '2026-10-23'
+  published: true
+- id: kitt-swearing
+  question: Why is KITT swearing at me?
+  answer: >-
+    Savage KITT, the default personality in KITT Launcher.2, swears in every sentence by design,
+    while keeping facts and safety warnings exact. Switch to Classic for the polite TV version, or
+    to KARR, which doesn't swear either, in KITT Config → AI core & personality.
+  projects: [kitt-launcher]
+  topics: [AI, Usage]
+  links: [{ label: Set up KITT's AI, href: /guides/set-up-kitt-ai }]
+  reviewed: '2026-10-23'
+  published: true
+- id: obd-adapter-not-found
+  question: KITT can't find my Bluetooth OBD-II adapter. What now?
+  answer: >-
+    Make sure the ignition is on, so the adapter has power, and that Bluetooth and Location are
+    on. Then open Diagnostics → Link. It explains what Android's Bluetooth looks like to apps on
+    your head unit, lists adapters without a name, and lets you connect straight to an adapter's
+    address as Classic or BLE. The connection log names the layer that failed.
+  projects: [kitt-launcher]
+  topics: [Bluetooth/BLE, OBD-II, Troubleshooting]
+  links: [{ label: Connect an OBD-II adapter, href: /guides/connect-obd-adapter }]
+  reviewed: '2026-10-23'
+  published: true
+- id: kitt-write-to-car
+  question: Can KITT Launcher change anything in my car?
+  answer: >-
+    It's read-only by design. The raw command console only sends read-only commands, and nothing
+    is sent to the vehicle except reads. The one exception is clearing fault codes, which is a
+    manual button with a warning and never happens automatically.
+  projects: [kitt-launcher]
+  topics: [OBD-II, Safety]
+  reviewed: '2026-10-23'
+  published: true
+- id: kitt-microphone-hijack
+  question: My head unit opens its own voice app when I talk to KITT.
+  answer: >-
+    Some head units hijack the microphone into their stock voice app. KITT detects this and won't
+    trigger the stock recognizer, and the Microphone fix section in KITT Config gives the steps to
+    stop the hijacker on your unit.
+  projects: [kitt-launcher]
+  topics: [Troubleshooting, Head units]
+  reviewed: '2026-10-23'
+  published: true
+- id: kitt-update-key-different
+  question: KITT Config → Updates says the key is different. How do I fix it?
+  answer: >-
+    Android only updates an app with one signed by the same key. This happens if you built it
+    yourself or installed a test build. Use Backup in KITT Config, uninstall once, install the
+    release APK from the downloads page, and restore. Updates work normally from then on.
+  projects: [kitt-launcher]
+  topics: [Updates, Installation]
+  links: [{ label: Installing apps from this site, href: /guides/installing-android-apps }]
+  reviewed: '2026-10-23'
+  published: true
+- id: retrotv-includes-games
+  question: Does RetroTV include games or ROMs?
+  answer: >-
+    No. RetroTV contains no games, ROMs or BIOS files. It opens independent third-party game
+    websites and plays files you load or that those sites provide. What's available, and legal to
+    play, depends on each site and on where you live.
+  projects: [retrotv]
+  topics: [Legal, Usage]
+  reviewed: '2026-10-23'
+  published: true
+- id: retrotv-game-wont-start
+  question: A game in RetroTV won't start or is stuck on a black screen.
+  answer: >-
+    Open the quick menu (hold OK or press Menu) and choose "Game not working? Fix it". It steps
+    through player choice, desktop or mobile view, ad blocking and controller mode, and remembers
+    what worked for that site. Also make sure Android System WebView is up to date.
+  projects: [retrotv]
+  topics: [Troubleshooting]
+  links: [{ label: Install guide, href: /guides/install-retrotv }]
+  reviewed: '2026-10-23'
+  published: true
+- id: retrotv-fire-tv
+  question: Does RetroTV work on Fire TV?
+  answer: >-
+    Yes, Fire TV devices on Android 7.0 or newer are supported. Install it with Downloader after
+    turning on "Install unknown apps" for Downloader in Developer options.
+  projects: [retrotv]
+  topics: [Compatibility, Installation]
+  links: [{ label: Install guide, href: /guides/install-retrotv }]
+  reviewed: '2026-10-23'
+  published: true
+- id: blackbox-internet
+  question: Does BLACKBOX send my data anywhere?
+  answer: >-
+    The standard edition doesn't request internet permission at all, and each release is checked
+    for that automatically. The optional AI runs on the phone from a model file you import. Only
+    the separate BLACKBOX Net app has internet permission, for its ping, port and DNS tools.
+  projects: [blackbox]
+  topics: [Privacy]
+  reviewed: '2026-10-23'
+  published: true
+- id: blackbox-status
+  question: Is BLACKBOX finished?
+  answer: >-
+    No. It's in active development at 0.2.1. Core workflows have automated tests, including
+    emulator runs at phone and unfolded-Fold sizes. Real-device behaviour, tabletop posture, the
+    widget, photo text reading, dictation and on-device AI with a real model still need
+    verification.
+  projects: [blackbox]
+  topics: [Status]
+  reviewed: '2026-10-23'
+  published: true
+- id: checksum-meaning
+  question: What does the SHA-256 checksum on a download prove?
+  answer: >-
+    That your file is byte-for-byte the published file. It doesn't prove the app is safe, bug-free
+    or compatible with your device, and it doesn't replace Android's app signing.
+  topics: [Security, Installation]
+  links: [{ label: Verify a download, href: /guides/verify-a-download }]
+  reviewed: '2026-10-23'
+  published: true
+- id: developer-verification
+  question: Will Android's new developer verification block these apps?
+  answer: >-
+    It depends on your device and region. From 30 September 2026, certified Android devices in
+    Brazil, Indonesia, Singapore and Thailand require registered developers, and Google plans to
+    expand globally from 2027. Google says unregistered apps can still be installed with adb or an
+    advanced flow. Whether these apps are registered hasn't been confirmed yet.
+  topics: [Installation, Compatibility]
+  links: [{ label: Installing apps from this site, href: /guides/installing-android-apps }]
+  reviewed: '2026-10-23'
+  published: true
+- id: support
+  question: Do you offer support or take bug reports?
+  answer: >-
+    These are personal projects shared as-is, with no warranty or support contract. You can still
+    send respectful bug reports, questions and ideas through the feedback form. They're read, but
+    there's no promise of a reply or a fix.
+  topics: [Feedback]
+  links: [{ label: Send feedback, href: /feedback }]
+  reviewed: '2026-10-23'
+  published: true
+- id: feedback-public
+  question: Will my feedback appear on the site?
+  answer: >-
+    Only if you choose public, and only after it's reviewed. Public submissions start as pending.
+    Private reports and any reply email are never shown publicly.
+  topics: [Feedback, Privacy]
+  links: [{ label: Privacy, href: /privacy }]
+  reviewed: '2026-10-23'
+  published: true

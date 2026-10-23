@@ -1,0 +1,28 @@
+project: kitt-launcher
+edition: kitt2
+version: '1.5'
+channel: archived
+date: '2026-10-19'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/KITT-Launcher.2-releases/releases/download/v1.5/KITT-Launcher.2-v1.5.apk
+  filename: KITT-Launcher.2-v1.5.apk
+  type: Android APK
+  bytes: 34568498
+  sha256: 974e434b204ff153da9bf33f9c17a8668cb641ad8626e711afcbce112784d942
+  checksumSource: GitHub release asset digest
+minimum: Android 7.0+ head unit, 7–10" landscape
+platforms:
+  - Android head unit
+notes:
+  - Free on-device voice, RetroTV game browser, stream home page
+  - 'Film themes: three editions and three characters per film'
+  - Fix OBD connects on the head unit and a slow, stalling browser
+releasePage: https://github.com/tdater/KITT-Launcher.2-releases/releases/tag/v1.5
+internal:
+  sources:
+    - 'GitHub releases API: tdater/KITT-Launcher.2-releases v1.5'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

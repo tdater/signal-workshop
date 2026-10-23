@@ -1,0 +1,200 @@
+---
+import Base from '../layouts/Base.astro';
+import { getFaqs, getProjects, formatDate, inlineMd } from '../lib/content';
+
+const faqs = await getFaqs();
+const projects = await getProjects();
+const topics = [...new Set(faqs.flatMap((f) => f.topics))].sort();
+const titleOf = (s: string) => projects.find((p) => p.slug === s)?.title ?? s;
+---
+
+<Base
+  title="FAQ"
+  current="/faq"
+  description="Answers about installing, compatibility, Bluetooth OBD adapters, controllers, privacy and feedback for Travis Dater's projects."
+>
+  <div class="wrap--narrow section">
+    <p class="eyebrow">FAQ</p>
+    <h1>Frequently asked questions</h1>
+    <p class="lede">
+      Search by symptom or filter by project and topic. Every answer has its own link you can share.
+    </p>
+
+    <form class="faq-tools" data-faq-tools hidden>
+      <div class="field">
+        <label for="faq-q">Search answers</label>
+        <input
+          id="faq-q"
+          type="search"
+          placeholder="e.g. adapter, Fire TV, swearing"
+          autocomplete="off"
+        />
+      </div>
+      <div class="field">
+        <label for="faq-project">Project</label>
+        <select id="faq-project">
+          <option value="">All projects</option>
+          {projects.map((p) => (
+            <option value={p.slug}>{p.title}</option>
+          ))}
+          <option value="general">General</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="faq-topic">Topic</label>
+        <select id="faq-topic">
+          <option value="">All topics</option>
+          {topics.map((t) => (
+            <option value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+    </form>
+    <p class="mono hint" aria-live="polite" data-faq-count></p>
+
+    <div class="faqs">
+      {faqs.map((f) => (
+        <section
+          class="faq"
+          id={f.id}
+          data-projects={f.projects.length ? f.projects.join(' ') : 'general'}
+          data-topics={f.topics.join('|')}
+          data-text={`${f.question} ${f.answer} ${f.topics.join(' ')}`.toLowerCase()}
+        >
+          <h2 class="faq__q">
+            <a href={`#${f.id}`} class="faq__anchor">
+              {f.question}
+            </a>
+          </h2>
+          <p set:html={inlineMd(f.answer)} />
+          <div class="faq__meta mono">
+            {f.projects.map((p) => (
+              <a href={`/projects/${p}`} class="badge">
+                {titleOf(p)}
+              </a>
+            ))}
+            {f.topics.map((t) => (
+              <span class="badge badge--muted">{t}</span>
+            ))}
+            <span class="hint">Reviewed {formatDate(f.reviewed)}</span>
+          </div>
+          {f.links.length > 0 && (
+            <p class="faq__links">
+              {f.links.map((l) => (
+                <a href={l.href}>{l.label}</a>
+              ))}
+            </p>
+          )}
+        </section>
+      ))}
+    </div>
+    <div class="panel" data-faq-empty hidden>
+      <p>
+        <strong>No answers match.</strong> Try fewer words, or{' '}
+        <a href="/feedback?type=question">ask the question</a>.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-faq-tools]');
+  if (form) {
+    form.hidden = false;
+    form.addEventListener('submit', (e) => e.preventDefault());
+    const q = form.querySelector<HTMLInputElement>('#faq-q')!;
+    const proj = form.querySelector<HTMLSelectElement>('#faq-project')!;
+    const topic = form.querySelector<HTMLSelectElement>('#faq-topic')!;
+    const items = [...document.querySelectorAll<HTMLElement>('.faq')];
+    const count = document.querySelector<HTMLElement>('[data-faq-count]')!;
+    const empty = document.querySelector<HTMLElement>('[data-faq-empty]')!;
+    const params = new URLSearchParams(location.search);
+    if (params.get('project')) proj.value = params.get('project')!;
+    if (params.get('q')) q.value = params.get('q')!;
+    const apply = () => {
+      const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+      let n = 0;
+      for (const it of items) {
+        const ok =
+          (!proj.value || it.dataset.projects!.split(' ').includes(proj.value)) &&
+          (!topic.value || it.dataset.topics!.split('|').includes(topic.value)) &&
+          terms.every((t) => it.dataset.text!.includes(t));
+        it.hidden = !ok;
+        if (ok) n++;
+      }
+      count.textContent = `${n} of ${items.length} answers`;
+      empty.hidden = n > 0;
+    };
+    [q, proj, topic].forEach((el) => el.addEventListener('input', apply));
+    // A shared link must always show its answer, even if the current filters would hide it.
+    const reveal = () => {
+      const target = location.hash
+        ? document.getElementById(decodeURIComponent(location.hash.slice(1)))
+        : null;
+      if (target?.classList.contains('faq') && target.hidden) {
+        q.value = '';
+        proj.value = '';
+        topic.value = '';
+        apply();
+        target.scrollIntoView();
+      }
+    };
+    window.addEventListener('hashchange', reveal);
+    apply();
+    reveal();
+  }
+</script>
+
+<style>
+  .faq-tools {
+    display: grid;
+    gap: 0 var(--space-4);
+    grid-template-columns: 2fr 1fr 1fr;
+    margin-top: var(--space-5);
+  }
+  @media (max-width: 40rem) {
+    .faq-tools {
+      grid-template-columns: 1fr;
+    }
+  }
+  .faq {
+    border-top: 1px solid var(--line);
+    padding: var(--space-5) 0;
+  }
+  .faq:target {
+    background: color-mix(in srgb, var(--signal) 6%, transparent);
+    box-shadow:
+      -1rem 0 0 color-mix(in srgb, var(--signal) 6%, transparent),
+      1rem 0 0 color-mix(in srgb, var(--signal) 6%, transparent);
+  }
+  .faq__q {
+    font-size: var(--step-1);
+  }
+  .faq__anchor {
+    text-decoration: none;
+  }
+  .faq__anchor:hover {
+    text-decoration: underline;
+  }
+  .faq__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    font-size: 0.8rem;
+  }
+  .faq__meta a.badge {
+    text-decoration: none;
+  }
+  .faq__links {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin: var(--space-3) 0 0;
+  }
+  .faq__links a {
+    min-height: var(--target);
+    display: inline-flex;
+    align-items: center;
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+---
+
+<Base
+  title="Community guidelines"
+  description="How feedback is moderated on Travis Dater's project site."
+>
+  <article class="wrap--narrow section prose">
+    <p class="eyebrow">Rules</p>
+    <h1>Community guidelines</h1>
+    <Disclaimer />
+    <h2>What that means in practice</h2>
+    <ul>
+      <li>
+        <strong>Disagreement is fine.</strong> "This feature is pointless" or "1.8 broke my adapter
+        and I'm annoyed" are welcome, as long as they're aimed at the software and not at a person.
+      </li>
+      <li>
+        <strong>Bug reports are wanted</strong>, even frustrated ones. Steps to reproduce help more
+        than volume.
+      </li>
+      <li>
+        <strong>Deleted without discussion:</strong> harassment, slurs, threats, personal attacks,
+        doxxing, spam, advertising, and anything illegal.
+      </li>
+      <li>
+        <strong>Review first.</strong> Public submissions appear only after review, so there can be
+        a delay. Not everything gets published, and approval isn't a promise to build anything.
+      </li>
+      <li>
+        <strong>Private stays private.</strong> Private reports and reply emails are never
+        published.
+      </li>
+      <li>
+        <strong>Keep secrets out.</strong> Don't post passwords, API keys, unredacted logs, VINs or
+        device identifiers. Anything like that is removed.
+      </li>
+    </ul>
+    <h2>Moderation actions</h2>
+    <p>
+      Travis can approve, reject, hide, mark as spam, remove, or reply to a submission. Removing
+      erases the content. Details are on the <a href="/privacy">privacy page</a>.
+    </p>
+    <p>
+      <a class="btn" href="/feedback">
+        Send feedback
+      </a>
+    </p>
+  </article>
+</Base>

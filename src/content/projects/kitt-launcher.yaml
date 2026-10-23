@@ -1,0 +1,429 @@
+slug: kitt-launcher
+title: KITT Launcher
+tagline: A Knight Rider home screen for Android car head units, with an OBD-II scanner and an AI co-pilot that can read your live vehicle data.
+published: true
+order: 1
+state: released
+stateNote: Version 1.8 for both editions. Shared as-is by one person, so no warranty and no support contract.
+accent: '#ff4b3e'
+motif: scanner
+icon:
+  src: /media/icons/kitt-launcher.webp
+  alt: KITT Launcher app icon
+category: [Automotive, AI, Android]
+platforms: [Android head unit]
+tags: [car, head-unit, obd2, bluetooth, ai, voice, navigation, launcher, offline]
+summary: >-
+  KITT Launcher takes over the stock home screen on an aftermarket Android car head unit and
+  replaces it with a KITT-style dashboard. You get a live map with spoken directions, an
+  ELM327 OBD-II scanner, a voice and text co-pilot called KITT that can see your vehicle data,
+  and one tabbed browser for streaming, AI chat sites and browser games. The red scanner light
+  sweeps across the top the whole time.
+audience:
+  - People with an aftermarket Android head unit who are tired of the stock launcher.
+  - Owners of a cheap ELM327 Bluetooth or Wi-Fi adapter who want real diagnostics on the dash.
+  - Knight Rider fans. No judgment. Okay, some judgment.
+problem: >-
+  Most aftermarket Android head units ship with a generic launcher, and getting useful car data
+  onto the screen means juggling separate scanner, navigation, media and assistant apps. KITT
+  Launcher pulls them into one home screen that's built for a car. It reads live data from a cheap
+  OBD-II adapter, explains fault codes in plain English and answers questions about the car
+  out loud.
+why: >-
+  The first release went out on 2 October 2026, laid out for one big 12.1-inch portrait head
+  unit. The release notes show how it grew from there: problems found on real head units got
+  fixed and shipped quickly. Bluetooth adapters that only connected once, a microphone grabbed by the stock
+  voice app, and a long AI chat that could freeze the whole launcher each got their own fix.
+story:
+  - date: '2026-10-02'
+    title: First public release
+    body: >-
+      v1.0 shipped with the home screen, scanner light, ten themes, the OBD-II scanner, the KITT
+      AI co-pilot, map search with spoken directions, and the browser.
+    evidence: GitHub release v1.0 in the KITT Launcher releases repository
+  - date: '2026-10-10'
+    title: Don't let one web page take the car down
+    body: >-
+      A stuck AI chat page could freeze everything until the head unit fell back to its stock
+      launcher. v1.2 shuts down only the stuck page, offers Reload, and makes updates install
+      reliably even over slow phone hotspots.
+    evidence: v1.2 notes on the published features page
+  - date: '2026-10-11'
+    title: A second edition for small landscape screens
+    body: >-
+      A layout that fills a 13-inch portrait screen wastes a 7-inch landscape one, because the
+      tabs and a tall dock eat a quarter of its height. KITT Launcher.2 moved the page buttons into
+      a side rail and added a Lite mode for budget units, rather than squeezing one design onto
+      both.
+    evidence: '"Why two editions?" on the published features page; KITT Launcher.2 v1.0 release'
+  - date: '2026-10-19'
+    title: One codebase, two editions
+    body: >-
+      From v1.8 both editions build from the same code as two product flavors, so a fix reaches
+      both at once. The original repository was retired at v1.7. v1.8 also added offline "Hey
+      KITT", offline speech input and answers that work with no signal.
+    evidence: v1.8 release notes; the retired repository's README
+capabilities:
+  - group: Home screen
+    items:
+      - Live OpenStreetMap map with place search, route preview and spoken turn-by-turn directions. No account needed.
+      - Pages for Drive, Gauges, Media, AI, Games, Widgets and Apps. Swiping from the screen edge always changes page.
+      - Optional driving layout with bigger media and volume buttons and your top three apps while the car is moving.
+      - Eleven themes, including film HUD themes with three editions each, plus night mode and a custom accent colour.
+  - group: OBD-II car scanner
+    items:
+      - Works with ELM327-compatible adapters over Bluetooth Classic, Bluetooth Low Energy or Wi-Fi.
+      - Live gauges with warning limits, sensor graphs and CSV data logging.
+      - Stored, pending and permanent fault codes, freeze frame and emissions readiness.
+      - VIN decoding, battery and charging voltages, fuel log, maintenance schedule and trip computer.
+      - Read-only by design. Codes are only cleared when you press that button and accept its warning.
+  - group: KITT, the co-pilot
+    items:
+      - Talk or type. Each question includes your live readings, fault codes and a 30-day driving summary.
+      - Bring your own Gemini or Perplexity API key. Keys are encrypted on the device.
+      - Offline "Hey KITT", offline speech input and offline neural voices (v1.8).
+      - Instant voice commands like "open Spotify", "read my codes" or "navigate to …" run without the AI.
+      - Personalities include Classic (polite), KARR, Unfiltered and Savage. Savage, the KITT Launcher.2 default, swears constantly.
+  - group: Browser
+    items:
+      - One tabbed browser behind the Stream window, the AI page and the Games page.
+      - Ad blocking, per-site desktop or mobile layout, and a data saver mode for phone hotspots.
+      - A stuck page gets shut down instead of the launcher.
+integrations:
+  - name: Google Gemini API
+    note: Optional. Needs your own API key, entered in KITT Config.
+  - name: Perplexity API
+    note: Optional. Needs your own API key. Each answer shows what it cost.
+  - name: OpenStreetMap, Photon and OSRM
+    note: Map tiles, place search and routing. Only contacted when you search or navigate.
+  - name: Open-Meteo
+    note: Road weather alerts.
+  - name: NHTSA VIN lookup
+    note: Optional online VIN decode, alongside the built-in decoder.
+requirements:
+  - label: Android
+    value: 7.0 or newer (minSdk 24)
+  - label: Device
+    value: An aftermarket Android car head unit. KITT Launcher is laid out for big portrait screens and KITT Launcher.2 for 7 to 10 inch landscape screens.
+  - label: OBD-II adapter
+    value: Any ELM327-compatible Bluetooth Classic, BLE or Wi-Fi adapter, for the scanner features only.
+  - label: AI
+    value: Your own Gemini or Perplexity API key, for KITT's AI answers. A consumer chat subscription isn't the same as API access.
+  - label: Network
+    value: A data connection for maps, routing, AI answers and streaming. Offline voice and offline answers work without one.
+  - label: Google Play Services
+    value: Not required
+permissions:
+  - name: Location
+    why: Centres the map on you, drives turn-by-turn guidance and looks up speed limits.
+  - name: Nearby devices (Bluetooth)
+    why: Finds and connects to your OBD-II adapter.
+  - name: Microphone
+    why: Voice questions, "Hey KITT" and voice commands.
+  - name: Display over other apps
+    why: Shows the see-through scanner strip on top of other apps. Taps pass through it.
+  - name: Install unknown apps
+    why: Lets KITT Config → Updates install new versions, and lets you install an APK you downloaded in the browser when you tap Install.
+  - name: Notification access
+    why: Lets the Media page show and control whatever another app is playing.
+limitations:
+  - Not on the Play Store. You install it from the APK.
+  - No support and no warranty. It's a personal project shared as-is.
+  - The screenshots and clips were captured on head-unit emulators in demo mode. Real readings depend on your car, your adapter and your head unit.
+  - Performance timer results are indicative only, because OBD speed has limited precision.
+  - Guidance runs while the launcher is on screen.
+  - Some head units hand the microphone to their stock voice app. KITT Config has a Microphone fix section for this.
+  - Updating over a build signed with a different key fails. Android only updates an app with one signed by the same key.
+editions:
+  - id: kitt
+    name: KITT Launcher
+    fit: Big portrait screens (11 to 13 inch, Tesla-style 9:16). Landscape screens work too.
+    appId: com.aiconsole.knightriderlauncher
+  - id: kitt2
+    name: KITT Launcher.2
+    fit: 7 to 10 inch landscape screens (1024×600, 1280×720, 1280×800) and budget head units.
+    appId: com.aiconsole.kittlauncher2
+mediaNote: >-
+  Every capture comes from a head-unit emulator in the app's demo mode, so the vehicle readings,
+  fault code and trip are simulated. On the road they come from your OBD adapter.
+media:
+  - kind: video
+    src: /media/kitt-launcher/l2-tour.mp4
+    poster: /media/kitt-launcher/l2-tour-poster.webp
+    width: 1024
+    height: 600
+    alt: Silent screen recording of KITT Launcher.2 moving between its home screen pages
+    caption: KITT Launcher.2 on a 7-inch landscape screen, going through Drive, Gauges, Media, AI and Apps from the side rail. Silent 14-second clip with no narration.
+    group: Clips
+    evidence: Recorded on a 1024×600 head-unit emulator in demo mode
+  - kind: video
+    src: /media/kitt-launcher/tour.mp4
+    poster: /media/kitt-launcher/tour-poster.webp
+    width: 600
+    height: 862
+    alt: Silent screen recording of KITT Launcher moving between its home screen pages
+    caption: KITT Launcher on a 12.1-inch portrait screen, going through Drive, Gauges, Media and Apps from the page tabs. Silent clip with no narration.
+    group: Clips
+    evidence: Recorded on a portrait head-unit emulator in demo mode
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-drive.webp,
+      thumb: /media/kitt-launcher/l2-drive-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'KITT Launcher.2 Drive page with the map, live gauges and apps side by side, and the side rail on the left',
+      caption: Drive page with the map,
+      gauges and apps side by side,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-kitt.webp,
+      thumb: /media/kitt-launcher/l2-kitt-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'KITT panel announcing the vehicle link and a simulated fault code',
+      caption: KITT announcing the vehicle link and a fault code,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-gauges.webp,
+      thumb: /media/kitt-launcher/l2-gauges-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'A full-height wall of OBD-II gauges showing simulated readings',
+      caption: A full-height wall of live gauges,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-codes.webp,
+      thumb: /media/kitt-launcher/l2-codes-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'Fault code list in plain English with emissions readiness below',
+      caption: Fault codes in plain English,
+      with emissions readiness,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-display.webp,
+      thumb: /media/kitt-launcher/l2-display-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'KITT Config display settings showing screen size and Lite mode options',
+      caption: Screen size and Lite mode settings,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-driving.webp,
+      thumb: /media/kitt-launcher/l2-driving-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'Driving layout with large media and volume buttons and three app shortcuts',
+      caption: Driving layout with bigger controls,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-theme-terminator.webp,
+      thumb: /media/kitt-launcher/l2-theme-terminator-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'Terminator film theme with red vision overlay and a targeting box on the map vehicle',
+      caption: Terminator theme,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-theme-matrix.webp,
+      thumb: /media/kitt-launcher/l2-theme-matrix-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'The Matrix film theme with green terminal panels over digital rain',
+      caption: The Matrix theme,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/drive.webp,
+      thumb: /media/kitt-launcher/drive-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'KITT Launcher Drive page on a portrait screen with the map above speed, tach and trip panels',
+      caption: Drive page on a 12.1-inch portrait screen,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/route.webp,
+      thumb: /media/kitt-launcher/route-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Map search showing a route preview with distance, drive time and arrival',
+      caption: Route preview with distance,
+      time and arrival,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/guidance.webp,
+      thumb: /media/kitt-launcher/guidance-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Turn-by-turn guidance banner with the next turn arrow and distance',
+      caption: Turn-by-turn guidance,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/kitt.webp,
+      thumb: /media/kitt-launcher/kitt-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'KITT reading out stored fault codes in the conversation panel',
+      caption: KITT reading the fault codes,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/gauges.webp,
+      thumb: /media/kitt-launcher/gauges-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Portrait wall of OBD gauges with simulated readings',
+      caption: Gauges page,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/codes.webp,
+      thumb: /media/kitt-launcher/codes-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Fault codes screen with readiness monitors and freeze frame',
+      caption: Codes,
+      readiness and freeze frame,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/trips.webp,
+      thumb: /media/kitt-launcher/trips-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Trip computer with distance, time, speeds and fuel economy',
+      caption: Trip computer,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/diag-link.webp,
+      thumb: /media/kitt-launcher/diag-link-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Diagnostics Link tab with adapter connection, manufacturer profile and protocol settings',
+      caption: Diagnostics → Link,
+      where adapters are paired and connected,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/diag-vehicle.webp,
+      thumb: /media/kitt-launcher/diag-vehicle-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Vehicle tab with VIN, battery and charging, fuel and maintenance',
+      caption: Diagnostics → Vehicle,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/config-1.webp,
+      thumb: /media/kitt-launcher/config-1-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'KITT Config AI core and personality settings',
+      caption: KITT Config → AI core & personality,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/theme-retrovfd.webp,
+      thumb: /media/kitt-launcher/theme-retrovfd-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Drive page in the Retro VFD theme',
+      caption: Retro VFD theme,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/theme-backtothefuture.webp,
+      thumb: /media/kitt-launcher/theme-backtothefuture-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Drive page in the Back to the Future theme with time circuits',
+      caption: Back to the Future theme,
+    }
+setupTrail:
+  - {
+      id: pick-edition,
+      title: Pick your edition,
+      detail: 'Portrait screen of 11 inches or more: KITT Launcher. A 7 to 10 inch landscape screen: KITT Launcher.2. They have different app IDs, so you can install both.',
+    }
+  - {
+      id: download,
+      title: Download the APK on the head unit,
+      detail: 'Use the download button on this page, or copy the file over on a USB stick. Compare the SHA-256 if you moved it between devices.',
+      guide: install-kitt-launcher,
+    }
+  - {
+      id: install,
+      title: Allow the install and open it,
+      detail: 'Android asks you to allow your browser or file manager to install unknown apps. Allow it for that one app only.',
+      guide: install-kitt-launcher,
+    }
+  - {
+      id: set-home,
+      title: Make it the home screen,
+      detail: 'Press Home, choose KITT Launcher (or KITT Launcher.2), then Always.',
+      guide: install-kitt-launcher,
+    }
+  - {
+      id: system-check,
+      title: Run System check,
+      detail: 'At the top of KITT Config. It lists every permission and setting KITT needs, each with a fix button.',
+    }
+  - {
+      id: adapter,
+      title: Connect your OBD-II adapter (parked),
+      detail: 'Diagnostics → Link. Engine running or ignition on, car parked.',
+      guide: connect-obd-adapter,
+    }
+  - {
+      id: ai,
+      title: Add an AI key (optional),
+      detail: "KITT Config → AI core & personality. Pick Classic if you don't want the swearing.",
+      guide: set-up-kitt-ai,
+    }
+  - {
+      id: final-test,
+      title: Final test,
+      detail: 'Gauges show live values, and asking KITT "how''s my coolant?" gets an answer that quotes a reading. This checklist can''t see your car, so only you can tick this one.',
+    }
+support: >-
+  No formal support, and the app README says bug reports aren't taken. You can still leave a
+  respectful comment or suggestion through the feedback form, and it may help shape a future
+  release.
+internal:
+  sources:
+    - KITT-Launcher-releases README and features page (index.html), commit 0ac768d
+    - KITT-Launcher.2 README, FEATURES.md, AndroidManifest.xml
+    - GitHub releases API for both release repositories
+  verified: '2026-10-23'
+  notes: Source repos are public on GitHub but the READMEs say source is not published, so the site never links them.

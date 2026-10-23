@@ -1,0 +1,27 @@
+project: blackbox
+edition: blackbox
+version: 0.2.0
+channel: archived
+date: '2026-10-20'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/BLACKBOX-releases/releases/download/v0.2.0/BLACKBOX-0.2.0.apk
+  filename: BLACKBOX-0.2.0.apk
+  type: Android APK
+  bytes: 131305250
+  sha256: b8ed92d31442cc312b9e453dccb11cac58f16c8b9ff7f40c7b31694595c39746
+  checksumSource: GitHub release asset digest
+minimum: Android 10+
+platforms:
+  - Android phone
+  - Foldable
+notes:
+  - 'Templates, two-tap capture, readings with charts, reminders and checklists, photo text reading, PDF reports, backup folders, an encrypted records database and four looks.'
+releasePage: https://github.com/tdater/BLACKBOX-releases/releases/tag/v0.2.0
+internal:
+  sources:
+    - 'GitHub releases API: tdater/BLACKBOX-releases v0.2.0'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

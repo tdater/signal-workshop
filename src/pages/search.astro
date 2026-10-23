@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro';
+import { getProjects, getGuides } from '../lib/content';
+const projects = await getProjects();
+const guides = await getGuides();
+---
+
+<Base
+  title="Search"
+  description="Search projects, guides, FAQ answers and release notes in one place."
+>
+  <div class="wrap--narrow section">
+    <p class="eyebrow">Workshop search</p>
+    <h1>Search</h1>
+    <form action="/search" method="get" role="search" class="sform">
+      <label for="q" class="visually-hidden">
+        Search projects, guides, FAQ and releases
+      </label>
+      <input
+        id="q"
+        name="q"
+        type="search"
+        placeholder="Try: Fire TV, OBD adapter, checksum, offline"
+        autocomplete="off"
+      />
+      <button class="btn btn--primary" type="submit">
+        Search
+      </button>
+    </form>
+    <p class="mono hint" aria-live="polite" data-status>
+      Searches projects, guides, FAQ answers and release notes. Everything runs in your browser.
+    </p>
+    <ol class="sresults" data-results></ol>
+    <noscript>
+      <p>Search needs JavaScript. Here's everything instead:</p>
+      <h2>Projects</h2>
+      <ul>
+        {projects.map((p) => (
+          <li>
+            <a href={`/projects/${p.slug}`}>{p.title}</a>
+          </li>
+        ))}
+      </ul>
+      <h2>Guides</h2>
+      <ul>
+        {guides.map((g) => (
+          <li>
+            <a href={`/guides/${g.slug}`}>{g.title}</a>
+          </li>
+        ))}
+      </ul>
+      <p>
+        <a href="/faq">All FAQ answers</a> · <a href="/downloads">All downloads</a>
+      </p>
+    </noscript>
+  </div>
+</Base>
+
+<script>
+  type Doc = { t: string; k: string; u: string; d: string; x: string };
+  const input = document.querySelector<HTMLInputElement>('#q')!;
+  const status = document.querySelector<HTMLElement>('[data-status]')!;
+  const list = document.querySelector<HTMLOListElement>('[data-results]')!;
+  let docs: Doc[] | null = null;
+
+  const score = (doc: Doc, terms: string[]) => {
+    const title = doc.t.toLowerCase();
+    const desc = doc.d.toLowerCase();
+    const body = doc.x.toLowerCase();
+    let s = 0;
+    for (const t of terms) {
+      if (title.includes(t)) s += 10;
+      else if (desc.includes(t)) s += 4;
+      else if (body.includes(t)) s += 1;
+      else return 0; // every term must appear somewhere
+    }
+    return s;
+  };
+
+  const run = async () => {
+    const q = input.value.trim();
+    const terms = q
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((t) => t.length > 1);
+    list.replaceChildren();
+    if (!terms.length) {
+      status.textContent = 'Type at least two letters.';
+      return;
+    }
+    try {
+      docs ??= await (await fetch('/search-index.json')).json();
+    } catch {
+      status.textContent =
+        "The search index couldn't be loaded. Try the Projects, Guides or FAQ pages instead.";
+      return;
+    }
+    const hits = docs!
+      .map((d) => ({ d, s: score(d, terms) }))
+      .filter((h) => h.s > 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 30);
+    status.textContent = hits.length
+      ? `${hits.length} result${hits.length > 1 ? 's' : ''} for “${q}”`
+      : `No results for “${q}”. Try fewer or different words, or browse the FAQ.`;
+    for (const { d } of hits) {
+      const li = document.createElement('li');
+      const kind = document.createElement('span');
+      kind.className = 'badge';
+      kind.textContent = d.k;
+      const a = document.createElement('a');
+      a.href = d.u;
+      a.textContent = d.t;
+      const p = document.createElement('p');
+      p.textContent = d.d;
+      li.append(kind, a, p);
+      list.append(li);
+    }
+  };
+
+  const initial = new URLSearchParams(location.search).get('q');
+  if (initial) {
+    input.value = initial;
+    run();
+  }
+  let timer: number | undefined;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = window.setTimeout(run, 150);
+  });
+  input.form!.addEventListener('submit', (e) => {
+    e.preventDefault();
+    history.replaceState(null, '', `?q=${encodeURIComponent(input.value)}`);
+    run();
+  });
+</script>
+
+<style>
+  .sform {
+    display: flex;
+    gap: var(--space-2);
+    margin: var(--space-5) 0 var(--space-3);
+  }
+  .sform input {
+    flex: 1;
+    font-size: var(--step-1);
+  }
+  .sresults {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-5) 0;
+  }
+  .sresults :global(li) {
+    border-top: 1px solid var(--line);
+    padding: var(--space-4) 0;
+    display: grid;
+    gap: var(--space-2);
+    justify-items: start;
+  }
+  .sresults :global(a) {
+    font-size: var(--step-1);
+    font-weight: 700;
+    font-family: var(--font-display);
+  }
+  .sresults :global(p) {
+    color: var(--text-2);
+    margin: 0;
+  }
+</style>

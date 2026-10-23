@@ -1,0 +1,137 @@
+slug: blackbox
+title: BLACKBOX
+tagline: A local-first Android workbench that keeps the evidence, tests, results and next step of a technical problem in one connected record.
+published: true
+order: 3
+state: active-development
+stateNote: Version 0.2.1. Active development. Core workflows have automated tests, but real-device behaviour is still being verified.
+accent: '#ff8a1f'
+motif: trace
+category: [Troubleshooting, AI, Android]
+platforms: [Android phone, Foldable]
+tags: [troubleshooting, offline, ai, foldable, notes, testing, handoff]
+summary: >-
+  BLACKBOX is a project intelligence workbench for Android. Capture evidence, ask a question,
+  plan a test, record the result, compare runs, then resume later or hand off a structured brief
+  to a coding agent. It works offline, needs no account, and the standard edition doesn't even
+  request internet permission.
+audience:
+  - Android and head-unit developers chasing bugs across many sessions.
+  - Anyone doing OBD-II, Bluetooth, electronics or install work who loses track of what was already tried.
+  - People who use AI coding agents and are tired of re-explaining the whole problem every time.
+problem: >-
+  A technical project ends up spread across screenshots, logs, notes, AI chats, source control
+  and memory. Questions like "which build introduced this?", "have I already tried that?" and
+  "what was the last known-good setup?" get hard to answer. BLACKBOX makes those answers part of
+  the project record instead of something you rebuild every time.
+why: >-
+  The sample investigation that ships with the app, "OBD values freeze after screen-off", is the
+  kind of multi-session head-unit problem it was designed for. The design rule is evidence
+  before answers: an AI suggestion never silently becomes a fact, and "unknown" counts
+  as a valid result.
+story:
+  - date: '2026-10-19'
+    title: 0.1.0, the offline investigation workbench
+    body: >-
+      Projects and investigations, evidence capture, test plans and results, deterministic
+      "what changed?" comparisons, resume capsules, editable handoffs and archives. Optional
+      on-device AI from an imported model file.
+    evidence: GitHub release v0.1.0 and the roadmap on the published BLACKBOX page
+  - date: '2026-10-20'
+    title: 0.2.0, for more than bugs
+    body: >-
+      Templates for car, home, network, software and other projects, two-tap capture, readings
+      with charts, reminders, PDF reports, an encrypted records database and four looks.
+    evidence: '"New in 0.2.0" on the published page'
+  - date: '2026-10-20'
+    title: 0.2.1, network tools as a separate app
+    body: >-
+      Ping, port check and DNS tools ship as a separate BLACKBOX Net edition. It's the only
+      edition with internet permission, so the regular app stays fully offline.
+    evidence: v0.2.1 release notes
+capabilities:
+  - group: Investigation workflow
+    items:
+      - Projects that hold several investigations, each with its own evidence, tests, status and next action.
+      - Evidence timeline for notes, photos, screenshots, logs, files, voice notes and measurements.
+      - Structured test runs recorded against a build and an environment snapshot.
+      - '"What changed?" comparisons that keep unknown values separate from unchanged ones.'
+  - group: Continuity
+    items:
+      - Resume capsules that get marked STALE once newer activity makes them outdated.
+      - Coding-agent handoffs as editable Markdown, which you review before sharing.
+      - Project archive export and import with checksums. An import always creates a new project.
+  - group: Since 0.2.0
+    items:
+      - Templates, two-tap capture from a widget or quick-settings tile, readings with charts, reminders and checklists.
+      - On-device text recognition and barcode scanning, PDF reports and backup folders.
+      - Records database encrypted with a key held by Android Keystore, plus an optional fingerprint gate.
+  - group: Optional AI
+    items:
+      - Off by default. Runs an imported LiteRT-LM model file on the phone, so there's no key, account or bill.
+      - Sees only the records you select, from projects that allow it. Its output is saved as an inferred claim, never as a fact.
+integrations:
+  - name: LiteRT-LM (on-device)
+    note: Optional. You import a 0.5 to 4 GB model file.
+  - name: BLACKBOX Net
+    note: An optional separate APK with ping, port check and DNS lookup. It's the only edition with internet permission.
+requirements:
+  - label: Android
+    value: 10 or newer
+  - label: Device
+    value: Designed for the Galaxy Z Fold8 and adapts to ordinary phones. Real-device fold behaviour is still being verified.
+  - label: Account / network
+    value: None. The standard edition has no internet permission.
+  - label: Storage
+    value: The APK is about 131 MB. Optional AI needs a 0.5 to 4 GB model file.
+permissions:
+  - name: No internet permission (standard edition)
+    why: Every release is checked for this automatically. Only BLACKBOX Net requests internet, for its network tools.
+limitations:
+  - Active development. Real-device behaviour, tabletop posture, the widget, photo text reading, dictation and on-device AI with a real model still need verification.
+  - No app screenshots have been published yet. The app's own page shows an illustration, which isn't reproduced here.
+  - BLACKBOX keeps records. It doesn't guarantee they're right, and it doesn't fix anything for you.
+  - Updating from 0.1.0 is designed to keep your records and encrypts them on first launch. Export an archive first if they matter.
+  - No support and no warranty.
+mediaNote: >-
+  No screenshots or recordings of BLACKBOX have been published yet. A labelled gallery will appear
+  here once real captures from a device are approved.
+setupTrail:
+  - {
+      id: download,
+      title: Download the APK on the phone,
+      detail: 'Use the download button on this page. Want the network tools too? Also get BLACKBOX Net, which installs alongside with its own records.',
+      guide: install-blackbox,
+    }
+  - {
+      id: install,
+      title: Allow the install,
+      detail: 'Allow your browser or file manager to install unknown apps when Android asks, then tap Install.',
+      guide: install-blackbox,
+    }
+  - {
+      id: template,
+      title: Start a project,
+      detail: 'Pick a template (car, home, network, software and more), or open the labelled sample project to look around.',
+      guide: install-blackbox,
+    }
+  - {
+      id: backup,
+      title: Set a backup folder,
+      detail: 'Pick a folder (SD card, USB stick, or one your sync app watches) so archives land outside the app.',
+    }
+  - {
+      id: final-test,
+      title: Final test,
+      detail: 'Capture a note, close the app, reopen it, and confirm the note is still there. Only you can confirm this one.',
+    }
+support: >-
+  No formal support, and bug reports aren't taken. Respectful feedback and ideas are welcome
+  through the feedback form.
+internal:
+  sources:
+    - BLACKBOX-releases README and page, commit 20a986e
+    - GitHub releases API
+    - tdater-BLACKBOX repository (empty, initial commit only)
+  verified: '2026-10-23'
+  notes: Source code location unknown. No real screenshots or icon available.

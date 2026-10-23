@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import { RETENTION_DAYS, RATE } from '../../functions/_lib/rules';
+---
+
+<Base
+  title="Privacy"
+  description="What this site stores, who can see it, how long it's kept and how to have it removed."
+>
+  <article class="wrap--narrow section prose">
+    <p class="eyebrow">Privacy</p>
+    <h1>Privacy</h1>
+    <p class="lede">
+      Short version: no trackers, no analytics, no ads and no visitor cookies. If you send feedback,
+      it's stored so Travis can read it. It's only shown publicly if you chose public and it was
+      approved.
+    </p>
+    <p class="hint">
+      Last updated 23 October 2026. This page describes how the site actually works. It isn't a
+      claim of compliance with any particular law.
+    </p>
+
+    <h2>Browsing</h2>
+    <ul>
+      <li>
+        No analytics, tracking pixels, advertising, social embeds or third-party fonts. Fonts and
+        images are served from this site.
+      </li>
+      <li>
+        No cookies are set for visitors. The only cookie is the owner's sign-in cookie for
+        moderation.
+      </li>
+      <li>
+        Two optional preferences are kept in your own browser's storage and never sent anywhere:
+        low-glow reading mode, and the ticks on a project's setup trail. Clear your site data to
+        remove them.
+      </li>
+      <li>
+        Like any website, the hosting provider (Cloudflare) processes your IP address and request
+        details to deliver pages and protect against abuse.
+      </li>
+    </ul>
+
+    <h2>Downloads</h2>
+    <p>
+      Download buttons link directly to the apps' public GitHub releases, so the file comes from
+      GitHub (github.com and its download servers), and GitHub's own privacy statement applies to
+      that request. QR codes on this site are generated when the site is built, so no link is ever
+      sent to a QR service.
+    </p>
+
+    <h2>Feedback</h2>
+    <h3>What's stored</h3>
+    <p>
+      The type, the project it's about, public or private, your title and message, an optional
+      display name, an optional reply email, any bug-report details you fill in, and the date. It's
+      stored in a database on the site's hosting provider.
+    </p>
+    <h3>Who can see it</h3>
+    <ul>
+      <li>
+        <strong>Public feedback</strong> starts as pending. Only after Travis approves it are the
+        type, project, title, message, display name (or "Anonymous"), date and any public reply
+        shown on the site.
+      </li>
+      <li>
+        <strong>Private reports</strong> are only ever visible to Travis. The system refuses to
+        publish them.
+      </li>
+      <li>
+        <strong>Reply emails</strong> are only visible to Travis, only used to reply to you, and
+        never shown publicly.
+      </li>
+    </ul>
+    <h3>Abuse protection</h3>
+    <p>
+      To limit spam, the server keeps a salted, one-way hash of your IP address for up to 24 hours
+      to count submissions (at most {RATE.submitPer10Min} per 10 minutes and {RATE.submitPerDay} per
+      day). Your IP address isn't stored with your feedback. Identical messages sent within a day
+      are refused as duplicates.
+    </p>
+    <h3>How long it's kept</h3>
+    <ul>
+      <li>
+        Rejected or spam submissions: the content is erased {RETENTION_DAYS.rejected} days after the
+        decision.
+      </li>
+      <li>Removed submissions: the content is erased immediately.</li>
+      <li>
+        Reply emails: erased {RETENTION_DAYS.email} days after you submit, whatever the status.
+      </li>
+      <li>
+        Approved public feedback: kept until you ask for it to be removed, or it's removed under the
+        community guidelines.
+      </li>
+      <li>
+        Pending items and private reports: kept until Travis handles them. There's no fixed limit.
+      </li>
+    </ul>
+    <p>
+      Erasing keeps a minimal record that an item existed, with its date, type, project and status,
+      plus an owner-only log of moderation actions (which action and when, with no content). If the
+      owner makes a database backup, erased content may remain in that backup until it's replaced.
+    </p>
+
+    <h3>Removal requests</h3>
+    <p>
+      Send a private report through the <a href="/feedback">feedback form</a> with the reference
+      shown on your receipt, or enough detail to find the item. It will be removed and its content
+      erased.
+    </p>
+
+    <h2>Please don't send</h2>
+    <p>
+      Passwords, API or licence keys, unredacted logs, VINs, or other vehicle and device
+      identifiers. File uploads aren't accepted.
+    </p>
+  </article>
+</Base>

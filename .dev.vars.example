@@ -1,0 +1,9 @@
+# Copy to .dev.vars for local development. Never commit .dev.vars.
+# Generate the hash with: npm run admin:hash
+ADMIN_PASSWORD_HASH=
+# 32+ random bytes, e.g. `openssl rand -base64 48`
+SESSION_SECRET=
+# Random salt used to hash visitor IPs for rate limiting
+IP_HASH_SALT=
+# Comma-separated origins allowed to POST (your site's https origin). Localhost is allowed in dev.
+ALLOWED_ORIGINS=

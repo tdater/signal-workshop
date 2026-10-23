@@ -1,0 +1,509 @@
+---
+import Base from '../../layouts/Base.astro';
+import DownloadPassport from '../../components/DownloadPassport.astro';
+import Gallery from '../../components/Gallery.astro';
+import SetupTrail from '../../components/SetupTrail.astro';
+import Motif from '../../components/Motif.astro';
+import FeedbackList from '../../components/FeedbackList.astro';
+import {
+  getProjects,
+  getReleases,
+  getGuides,
+  getFaqs,
+  stateLabel,
+  formatDate,
+  editionName,
+  inlineMd,
+  type Project,
+} from '../../lib/content';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project: p } = Astro.props as { project: Project };
+const releases = (await getReleases()).filter((r) => r.project === p.slug);
+const current = releases.filter((r) => r.current);
+const previous = releases.filter((r) => !r.current);
+const guides = (await getGuides()).filter((g) => g.project === p.slug);
+const faqs = (await getFaqs()).filter((f) => f.projects.includes(p.slug));
+const installGuide = guides.find((g) => g.slug.startsWith('install-'))?.slug;
+const shot = p.media.find((m) => m.kind === 'screenshot');
+
+const toc = [
+  ['problem', 'The problem'],
+  ['story', 'Why it exists'],
+  ['capabilities', 'What it does'],
+  ['media', 'Screens'],
+  ['requirements', 'Requirements'],
+  ['setup', 'Setup trail'],
+  ['limits', 'Limitations'],
+  ['download', 'Download'],
+  ['help', 'Guides & FAQ'],
+  ['feedback', 'Feedback'],
+];
+---
+
+<Base
+  title={p.title}
+  description={p.tagline}
+  accent={p.accent}
+  current="/projects"
+  ogImage={shot?.src}
+>
+  <div class="phero">
+    <div class="wrap">
+      <nav aria-label="Breadcrumb" class="crumbs mono">
+        <a href="/projects">Projects</a> / <span aria-current="page">{p.title}</span>
+      </nav>
+      <div class="phero__grid">
+        <div>
+          <div class="phero__id">
+            {p.icon ? (
+              <img src={p.icon.src} alt={p.icon.alt} width="72" height="72" class="phero__icon" />
+            ) : null}
+            <div>
+              <h1>{p.title}</h1>
+              <div class="meta-row">
+                <span class:list={['badge', p.state === 'released' ? 'badge--live' : 'badge--dev']}>
+                  {stateLabel[p.state]}
+                </span>
+                {p.platforms.map((pl) => (
+                  <span class="badge">{pl}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <p class="lede">{p.tagline}</p>
+          <p>{p.summary}</p>
+          <p class="hint">{p.stateNote}</p>
+          <Motif kind={p.motif} />
+        </div>
+        <aside aria-label="Current downloads" class="phero__aside">
+          {current.length ? (
+            current.map((r) => (
+              <DownloadPassport
+                release={r}
+                project={p}
+                installGuide={installGuide}
+                headingLevel="h2"
+                compact
+              />
+            ))
+          ) : (
+            <div class="panel">
+              <p class="eyebrow">No release yet</p>
+              <p>There's no approved public download for this project.</p>
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap pbody">
+    <nav class="toc" aria-label="On this page">
+      <p class="mono toc__title">On this page</p>
+      <ul>
+        {toc.map(([id, label]) => (
+          <li>
+            <a href={`#${id}`}>{label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="pcontent">
+      <section id="problem" class="psec">
+        <h2>The problem</h2>
+        <p>{p.problem}</p>
+        <h3>Who it's for</h3>
+        <ul>
+          {p.audience.map((a) => (
+            <li>{a}</li>
+          ))}
+        </ul>
+        {p.editions.length > 0 && (
+          <>
+            <h3>Which edition?</h3>
+            <div class="editions">
+              {p.editions.map((e) => (
+                <div class="panel">
+                  <p class="editions__name">{e.name}</p>
+                  <p>{e.fit}</p>
+                  {e.appId && <p class="mono hint">App ID {e.appId}</p>}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </section>
+
+      <section id="story" class="psec">
+        <h2>Why it exists</h2>
+        <p>{p.why}</p>
+        {p.story.length > 0 && (
+          <>
+            <h3>Decision trail</h3>
+            <p class="hint">
+              Each step comes from a published release or the project's own documentation, listed
+              under it.
+            </p>
+            <ol class="trace story">
+              {p.story.map((s) => (
+                <li class="trace__node">
+                  <time class="mono" datetime={s.date}>
+                    {formatDate(s.date)}
+                  </time>
+                  <h4>{s.title}</h4>
+                  <p>{s.body}</p>
+                  <p class="story__evidence mono">Source: {s.evidence}</p>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
+      </section>
+
+      <section id="capabilities" class="psec">
+        <h2>What it does now</h2>
+        <div class="caps">
+          {p.capabilities.map((c) => (
+            <div class="caps__group">
+              <h3>{c.group}</h3>
+              <ul>
+                {c.items.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        {p.integrations.length > 0 && (
+          <>
+            <h3>Integrations</h3>
+            <dl class="spec">
+              {p.integrations.map((i) => (
+                <>
+                  <dt>{i.name}</dt>
+                  <dd>{i.note}</dd>
+                </>
+              ))}
+            </dl>
+          </>
+        )}
+      </section>
+
+      <section id="media" class="psec">
+        <h2>Screens and clips</h2>
+        <Gallery media={p.media} note={p.mediaNote} title={p.title} />
+      </section>
+
+      <section id="requirements" class="psec">
+        <h2>Requirements and compatibility</h2>
+        <dl class="spec">
+          {p.requirements.map((r) => (
+            <>
+              <dt>{r.label}</dt>
+              <dd>{r.value}</dd>
+            </>
+          ))}
+        </dl>
+        {p.permissions.length > 0 && (
+          <>
+            <h3>Permissions, and why</h3>
+            <dl class="spec">
+              {p.permissions.map((r) => (
+                <>
+                  <dt>{r.name}</dt>
+                  <dd>{r.why}</dd>
+                </>
+              ))}
+            </dl>
+          </>
+        )}
+        <p class="hint">
+          Compatibility isn't promised for any particular phone, TV, head unit or vehicle. These are
+          the documented requirements.
+        </p>
+      </section>
+
+      <section id="setup" class="psec">
+        <h2>Guided setup trail</h2>
+        <SetupTrail project={p} />
+      </section>
+
+      <section id="limits" class="psec">
+        <h2>Limitations and known issues</h2>
+        <p>Read these before you download, so nothing comes as a surprise later.</p>
+        <ul class="limits">
+          {p.limitations.map((l) => (
+            <li>{l}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section id="download" class="psec">
+        <h2>Download</h2>
+        <div class="passports">
+          {current.map((r) => (
+            <DownloadPassport release={r} project={p} installGuide={installGuide} />
+          ))}
+        </div>
+        {previous.length > 0 && (
+          <details class="prev">
+            <summary>Previous versions ({previous.length})</summary>
+            <ul>
+              {previous.map((r) => (
+                <li>
+                  <strong>
+                    {editionName(p, r.edition)} v{r.version}
+                  </strong>{' '}
+                  · {formatDate(r.date)} ·{' '}
+                  <a href={`/downloads#passport-${r.id}`}>details and checksum</a>
+                  <span class="hint"> {r.notes[0]}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+      </section>
+
+      <section id="help" class="psec">
+        <h2>Guides and FAQ</h2>
+        {guides.length > 0 && (
+          <ul class="guide-links">
+            {guides.map((g) => (
+              <li>
+                <a href={`/guides/${g.slug}`}>{g.title}</a>
+                <span class="hint">{g.summary}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {faqs.length > 0 && (
+          <div class="pfaq">
+            {faqs.map((f) => (
+              <details>
+                <summary>{f.question}</summary>
+                <p set:html={inlineMd(f.answer)} />
+                <a href={`/faq#${f.id}`}>Permanent link</a>
+              </details>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section id="feedback" class="psec">
+        <h2>Feedback on {p.title}</h2>
+        <p>{p.support}</p>
+        <p>
+          <a class="btn" href={`/feedback?project=${p.slug}`}>
+            Leave feedback about {p.title}
+          </a>
+        </p>
+        <FeedbackList project={p.slug} />
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .phero {
+    background:
+      radial-gradient(
+        60rem 22rem at 10% -10%,
+        color-mix(in srgb, var(--accent) 14%, transparent),
+        transparent 70%
+      ),
+      var(--surface-1);
+    border-bottom: 1px solid var(--line);
+    padding-block: var(--space-5) var(--space-7);
+  }
+  .crumbs {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    margin-bottom: var(--space-5);
+  }
+  .crumbs a {
+    display: inline-flex;
+    min-height: var(--target);
+    align-items: center;
+  }
+  .phero__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  @media (max-width: 60rem) {
+    .phero__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .phero__id {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    margin-bottom: var(--space-4);
+  }
+  .phero__id h1 {
+    margin-bottom: var(--space-2);
+  }
+  .phero__icon {
+    border-radius: 18px;
+    flex: none;
+  }
+  .phero__aside {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .pbody {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: var(--space-7);
+    padding-top: var(--space-6);
+  }
+  .toc {
+    position: sticky;
+    top: 5.5rem;
+    align-self: start;
+  }
+  .toc__title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-2);
+  }
+  .toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 1px solid var(--line);
+  }
+  .toc a {
+    display: flex;
+    align-items: center;
+    min-height: 2.4rem;
+    padding-left: var(--space-3);
+    color: var(--text-2);
+    text-decoration: none;
+  }
+  .toc a:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 60rem) {
+    .pbody {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .toc {
+      position: static;
+    }
+    .toc ul {
+      display: flex;
+      flex-wrap: wrap;
+      border: 0;
+      gap: var(--space-2);
+    }
+    .toc a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 var(--space-3);
+      min-height: var(--target);
+    }
+  }
+  .psec {
+    padding-block: var(--space-6);
+    border-bottom: 1px solid var(--line);
+  }
+  .psec:last-child {
+    border-bottom: 0;
+  }
+  .psec h2 {
+    font-size: var(--step-2);
+  }
+  .psec h3 {
+    margin-top: var(--space-5);
+  }
+  .editions {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+  .editions__name {
+    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    margin-bottom: var(--space-2);
+  }
+  .story {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+  }
+  .story time {
+    color: var(--accent);
+    font-size: 0.85rem;
+  }
+  .story h4 {
+    font-size: var(--step-1);
+    margin: var(--space-1) 0 var(--space-2);
+  }
+  .story__evidence {
+    font-size: 0.78rem;
+    color: var(--text-3);
+  }
+  .caps {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+  .caps__group {
+    border-top: 2px solid var(--accent);
+    padding-top: var(--space-3);
+  }
+  .caps__group h3 {
+    margin-top: 0;
+  }
+  .caps ul,
+  .limits {
+    padding-left: 1.2em;
+  }
+  .caps li + li,
+  .limits li + li {
+    margin-top: var(--space-2);
+  }
+  .passports {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  }
+  .prev {
+    margin-top: var(--space-5);
+  }
+  .prev summary,
+  .pfaq summary {
+    cursor: pointer;
+    font-weight: 700;
+    min-height: var(--target);
+    display: flex;
+    align-items: center;
+  }
+  .prev li {
+    margin-top: var(--space-2);
+  }
+  .guide-links {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .guide-links li {
+    display: grid;
+  }
+  .pfaq details {
+    border-top: 1px solid var(--line);
+    padding: var(--space-2) 0;
+  }
+</style>

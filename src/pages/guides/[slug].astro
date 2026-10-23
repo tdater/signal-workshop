@@ -1,0 +1,231 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getGuides, getProjects, formatDate, inlineMd, type Guide } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const guides = await getGuides();
+  return guides.map((g) => ({ params: { slug: g.slug }, props: { guide: g } }));
+}
+const { guide: g } = Astro.props as { guide: Guide };
+const project = g.project ? (await getProjects()).find((p) => p.slug === g.project) : undefined;
+const related = (await getGuides())
+  .filter((x) => x.slug !== g.slug && x.project === g.project)
+  .slice(0, 4);
+// Extra notes below the frontmatter are plain paragraphs with inline Markdown only.
+const extra = (g.body ?? '')
+  .trim()
+  .split(/\n\s*\n/)
+  .filter(Boolean);
+---
+
+<Base title={g.title} description={g.summary} accent={project?.accent} current="/guides">
+  <article class="wrap--narrow section guide">
+    <nav aria-label="Breadcrumb" class="mono crumbs">
+      <a href="/guides">Guides</a>
+      {project && (
+        <>
+          {' '}
+          / <a href={`/projects/${project.slug}`}>{project.title}</a>
+        </>
+      )}
+    </nav>
+    <h1>{g.title}</h1>
+    <p class="lede">{g.summary}</p>
+    <dl class="spec guide__meta">
+      <dt>Applies to</dt>
+      <dd>{g.appliesTo}</dd>
+      {g.time && (
+        <>
+          <dt>Time</dt>
+          <dd>{g.time}</dd>
+        </>
+      )}
+      <dt>Last reviewed</dt>
+      <dd>
+        <time datetime={g.reviewed}>{formatDate(g.reviewed)}</time>
+      </dd>
+      <dt>Topics</dt>
+      <dd>{g.topics.join(', ')}</dd>
+    </dl>
+
+    {g.cautions.length > 0 && (
+      <div class="callout callout--warn" role="note">
+        <p class="callout__title">Before you start</p>
+        <ul>
+          {g.cautions.map((c) => (
+            <li set:html={inlineMd(c)} />
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {g.prerequisites.length > 0 && (
+      <section>
+        <h2>You'll need</h2>
+        <ul>
+          {g.prerequisites.map((p) => (
+            <li set:html={inlineMd(p)} />
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section>
+      <h2>Steps</h2>
+      <ol class="steps">
+        {g.steps.map((s, i) => (
+          <li class="step" id={`step-${i + 1}`}>
+            <h3>
+              <span class="mono step__n">{i + 1}</span> {s.title}
+            </h3>
+            <p set:html={inlineMd(s.body)} />
+            {s.expect && (
+              <p class="step__expect">
+                <span class="mono">You should see</span> <span set:html={inlineMd(s.expect)} />
+              </p>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="panel panel--accent">
+      <h2 class="h3">Result</h2>
+      <p set:html={inlineMd(g.result)} />
+      <h3>Check it worked</h3>
+      <p set:html={inlineMd(g.verify)} />
+    </section>
+
+    {g.troubleshooting.length > 0 && (
+      <section>
+        <h2>Troubleshooting</h2>
+        <dl class="trouble">
+          {g.troubleshooting.map((t) => (
+            <div>
+              <dt>{t.symptom}</dt>
+              <dd set:html={inlineMd(t.fix)} />
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    {extra.length > 0 && (
+      <section class="prose">
+        {extra.map((para) => (
+          <p set:html={inlineMd(para)} />
+        ))}
+      </section>
+    )}
+
+    <aside class="guide__foot">
+      <p>
+        Something in this guide wrong or out of date?{' '}
+        <a
+          href={`/feedback?type=bug${g.project ? `&project=${g.project}` : ''}&subject=${encodeURIComponent('Guide: ' + g.title)}`}
+        >
+          Tell me
+        </a>
+        .
+      </p>
+      {related.length > 0 && (
+        <>
+          <h2 class="h3">Related guides</h2>
+          <ul>
+            {related.map((r) => (
+              <li>
+                <a href={`/guides/${r.slug}`}>{r.title}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </aside>
+  </article>
+</Base>
+
+<style>
+  .crumbs {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    margin-bottom: var(--space-4);
+  }
+  .crumbs a {
+    display: inline-flex;
+    min-height: var(--target);
+    align-items: center;
+  }
+  .guide section {
+    margin-top: var(--space-6);
+  }
+  .guide h2 {
+    font-size: var(--step-2);
+  }
+  .guide .h3 {
+    font-size: var(--step-1);
+  }
+  .guide__meta {
+    margin-top: var(--space-5);
+  }
+  .steps {
+    list-style: none;
+    padding: 0;
+    counter-reset: none;
+  }
+  .step {
+    border-left: 2px solid var(--line-strong);
+    padding: 0 0 var(--space-5) var(--space-5);
+    position: relative;
+  }
+  .step:last-child {
+    border-left-color: transparent;
+  }
+  .step h3 {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+  }
+  .step__n {
+    position: absolute;
+    left: -1rem;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+  .step__expect {
+    background: var(--surface-2);
+    border-radius: var(--radius-s);
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-2);
+  }
+  .step__expect .mono {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--good);
+  }
+  .trouble > div {
+    border-top: 1px solid var(--line);
+    padding: var(--space-4) 0;
+  }
+  .trouble dt {
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+  }
+  .trouble dd {
+    margin: 0;
+    color: var(--text-2);
+  }
+  .guide__foot {
+    margin-top: var(--space-7);
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-5);
+  }
+</style>

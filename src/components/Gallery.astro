@@ -1,0 +1,274 @@
+---
+import type { Project } from '../lib/content';
+
+interface Props {
+  media: Project['media'];
+  note?: string;
+  title: string;
+}
+const { media, note, title } = Astro.props;
+const videos = media.filter((m) => m.kind === 'video');
+const stills = media.filter((m) => m.kind !== 'video');
+const groups = [...new Set(stills.map((m) => m.group))];
+---
+
+{media.length === 0 ? (
+  <div class="media-empty panel">
+    <p class="eyebrow">No published media yet</p>
+    <p>{note ?? 'No screenshots or recordings have been published for this project yet.'}</p>
+  </div>
+) : (
+  <div class="gallery" data-gallery>
+    {note && <p class="hint gallery__note">{note}</p>}
+    {videos.length > 0 && (
+      <div class="gallery__videos">
+        {videos.map((v) => (
+          <figure class="gallery__video">
+            <video
+              controls
+              preload="none"
+              playsinline
+              muted
+              poster={v.poster}
+              width={v.width}
+              height={v.height}
+              aria-label={v.alt}
+            >
+              <source src={v.src} type="video/mp4" />
+              <a href={v.src}>Download the clip</a>
+            </video>
+            <figcaption>
+              {v.caption}
+              {v.evidence && <span class="gallery__evidence">{v.evidence}</span>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
+    {groups.map((g) => (
+      <section class="gallery__group" aria-label={`${title} screenshots: ${g}`}>
+        <h3 class="gallery__group-title mono">{g}</h3>
+        <ul
+          class:list={[
+            'gallery__grid',
+            {
+              'gallery__grid--wide':
+                stills.find((m) => m.group === g)!.width >
+                stills.find((m) => m.group === g)!.height,
+            },
+          ]}
+        >
+          {stills
+            .filter((m) => m.group === g)
+            .map((m) => (
+              <li>
+                <figure>
+                  <a
+                    class="gallery__thumb"
+                    href={m.src}
+                    data-full={m.src}
+                    data-caption={m.caption}
+                    data-alt={m.alt}
+                    data-w={m.width}
+                    data-h={m.height}
+                  >
+                    <img
+                      src={m.thumb ?? m.src}
+                      alt={m.alt}
+                      width={m.thumb ? (m.width > m.height ? 560 : 400) : m.width}
+                      height={
+                        m.thumb
+                          ? Math.round((m.height * (m.width > m.height ? 560 : 400)) / m.width)
+                          : m.height
+                      }
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span class="visually-hidden">(opens full size)</span>
+                  </a>
+                  <figcaption>{m.caption}</figcaption>
+                </figure>
+              </li>
+            ))}
+        </ul>
+      </section>
+    ))}
+    <dialog class="lightbox" aria-label="Screenshot viewer">
+      <div class="lightbox__frame">
+        <img class="lightbox__img" alt="" />
+        <p class="lightbox__caption" aria-live="polite" />
+        <div class="lightbox__bar">
+          <button type="button" class="btn btn--small" data-step="-1">
+            Previous
+          </button>
+          <span class="lightbox__count mono" />
+          <button type="button" class="btn btn--small" data-step="1">
+            Next
+          </button>
+          <button type="button" class="btn btn--small lightbox__close" data-close>
+            Close
+          </button>
+        </div>
+      </div>
+    </dialog>
+  </div>
+)}
+
+<script>
+  // Enhances plain links-to-images into a modal viewer. <dialog>.showModal() traps focus and
+  // closes on Escape natively; focus returns to the thumbnail that opened it.
+  for (const root of document.querySelectorAll<HTMLElement>('[data-gallery]')) {
+    const dialog = root.querySelector<HTMLDialogElement>('dialog');
+    if (!dialog || typeof dialog.showModal !== 'function') continue;
+    const links = [...root.querySelectorAll<HTMLAnchorElement>('a[data-full]')];
+    const img = dialog.querySelector<HTMLImageElement>('.lightbox__img')!;
+    const cap = dialog.querySelector<HTMLElement>('.lightbox__caption')!;
+    const count = dialog.querySelector<HTMLElement>('.lightbox__count')!;
+    let index = 0;
+    let opener: HTMLElement | null = null;
+    const show = (i: number) => {
+      index = (i + links.length) % links.length;
+      const a = links[index];
+      img.src = a.dataset.full!;
+      img.alt = a.dataset.alt ?? '';
+      img.width = Number(a.dataset.w);
+      img.height = Number(a.dataset.h);
+      cap.textContent = a.dataset.caption ?? '';
+      count.textContent = `${index + 1} / ${links.length}`;
+    };
+    links.forEach((a, i) =>
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        opener = a;
+        show(i);
+        dialog.showModal();
+        dialog.querySelector<HTMLButtonElement>('[data-close]')?.focus();
+      }),
+    );
+    dialog.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t === dialog || t.closest('[data-close]')) dialog.close();
+      const step = t.closest<HTMLElement>('[data-step]')?.dataset.step;
+      if (step) show(index + Number(step));
+    });
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(index + 1);
+      if (e.key === 'ArrowLeft') show(index - 1);
+    });
+    dialog.addEventListener('close', () => opener?.focus());
+  }
+</script>
+
+<style>
+  .gallery__note {
+    margin-bottom: var(--space-5);
+  }
+  .gallery__videos {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1.7fr 1fr;
+    align-items: start;
+    margin-bottom: var(--space-6);
+  }
+  @media (max-width: 48rem) {
+    .gallery__videos {
+      grid-template-columns: 1fr;
+    }
+  }
+  figure {
+    margin: 0;
+  }
+  .gallery__video video {
+    width: 100%;
+    background: #000;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--line);
+  }
+  figcaption {
+    color: var(--text-2);
+    font-size: var(--step--1);
+    margin-top: var(--space-2);
+  }
+  .gallery__evidence {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-3);
+    margin-top: var(--space-1);
+  }
+  .gallery__group + .gallery__group {
+    margin-top: var(--space-6);
+  }
+  .gallery__group-title {
+    font-size: var(--step--1);
+    color: var(--text-2);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .gallery__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(min(46%, 10rem), 1fr));
+  }
+  .gallery__grid--wide {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  }
+  .gallery__thumb {
+    display: block;
+    border-radius: var(--radius-s);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface-1);
+  }
+  .gallery__thumb img {
+    width: 100%;
+    transition: transform var(--dur) var(--ease);
+  }
+  .gallery__thumb:hover {
+    border-color: var(--accent);
+  }
+  .gallery__thumb:hover img {
+    transform: scale(1.02);
+  }
+  .media-empty {
+    border-style: dashed;
+  }
+  .lightbox {
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-m);
+    background: var(--surface-1);
+    color: var(--text);
+    padding: var(--space-4);
+    max-width: min(96vw, 72rem);
+    max-height: 96vh;
+  }
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.85);
+  }
+  .lightbox__img {
+    max-height: 74vh;
+    width: auto;
+    margin: 0 auto;
+    border-radius: var(--radius-s);
+  }
+  .lightbox__caption {
+    margin: var(--space-3) 0;
+    color: var(--text-2);
+  }
+  .lightbox__bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+  .lightbox__count {
+    color: var(--text-2);
+    padding-inline: var(--space-2);
+  }
+  .lightbox__close {
+    margin-left: auto;
+  }
+</style>

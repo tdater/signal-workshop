@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+import { getProjects } from '../lib/content';
+const projects = await getProjects();
+---
+
+<Base
+  title="About"
+  current="/about"
+  description="Travis Dater is a systems administrator who builds practical Android tools for car head units, TVs and troubleshooting."
+>
+  <div class="wrap about section">
+    <div class="about__intro">
+      <p class="eyebrow">About</p>
+      <h1>Hi, I'm Travis.</h1>
+      <p class="lede">
+        I'm a systems administrator. My day job is making other people's technology behave, and my
+        evenings, apparently, are for making my own technology behave too.
+      </p>
+    </div>
+
+    <div class="about__grid">
+      <div class="prose">
+        <h2>Why I build these</h2>
+        <p>
+          Systems administration teaches you to notice the same failure twice and to automate it
+          away the third time. These projects come from that habit. A head unit with a useless stock
+          launcher, a TV that can't drive a web page, and troubleshooting notes spread across six
+          apps are all problems I'd rather fix than keep tolerating.
+        </p>
+        <p>
+          I'm not a software company. There's no team, no support desk and no release schedule. It's
+          one person building tools for real problems and sharing them as-is. What I can offer is
+          honesty about what each one does, what it doesn't, and how finished it is.
+        </p>
+
+        <h2>What I'm into</h2>
+        <ul>
+          <li>
+            <strong>Android apps</strong>, especially ones that run somewhere other than a phone,
+            like a dashboard or a TV.
+          </li>
+          <li>
+            <strong>Automotive diagnostics and telemetry</strong>: OBD-II, live sensor data, and
+            making cheap adapters useful.
+          </li>
+          <li>
+            <strong>Bluetooth and BLE</strong>, and the special kind of joy that is debugging them
+            on a head unit.
+          </li>
+          <li>
+            <strong>Vehicle electronics</strong> and hands-on installs.
+          </li>
+          <li>
+            <strong>AI integrations</strong> that stay honest about what they know, which is why
+            BLACKBOX keeps AI suggestions separate from evidence.
+          </li>
+          <li>
+            <strong>Practical troubleshooting</strong>: evidence first, one variable at a time, and
+            "unknown" is an acceptable answer.
+          </li>
+        </ul>
+
+        <h2>How I work</h2>
+        <p>
+          Ship something small that works, test it on real hardware, fix what breaks, and write down
+          why. You can see that in the decision trail on each project page. Each step links to the
+          release or document it came from, so none of it is a reconstructed origin myth.
+        </p>
+
+        <h2>Where it's heading</h2>
+        <p>
+          These are directions, not promises. BLACKBOX's roadmap points toward physical project work
+          like component labels, installation history and instrument readings, and then toward
+          controlled experiments. KITT Launcher keeps getting refined on real head units. Anything
+          new shows up on this site when there's a real release to download, not before.
+        </p>
+      </div>
+
+      <aside class="about__aside">
+        <div class="panel panel--accent">
+          <h2 class="h3">The projects</h2>
+          <ul class="about__list">
+            {projects.map((p) => (
+              <li style={`--accent:${p.accent}`}>
+                <a href={`/projects/${p.slug}`}>{p.title}</a>
+                <span class="hint">{p.tagline}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="panel">
+          <h2 class="h3">Get in touch</h2>
+          <p>
+            The <a href="/feedback">feedback form</a> is the way to reach me about the projects. I
+            don't publish personal contact details, and I don't do support contracts.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .about__intro {
+    max-width: 48rem;
+  }
+  .about__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: var(--space-7);
+    margin-top: var(--space-5);
+  }
+  @media (max-width: 56rem) {
+    .about__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .about__aside {
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+  }
+  .h3 {
+    font-size: var(--step-1);
+  }
+  .about__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .about__list li {
+    display: grid;
+    border-left: 3px solid var(--accent);
+    padding-left: var(--space-3);
+  }
+  .about__list a {
+    font-weight: 700;
+  }
+</style>

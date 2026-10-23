@@ -1,0 +1,364 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Moderation" noindex description="Owner-only moderation.">
+  <div class="wrap section admin" data-admin>
+    <p class="eyebrow">Owner only</p>
+    <h1>Moderation</h1>
+    <p class="hint">
+      This page is public, but it does nothing without signing in. Every action is checked by the
+      server against a signed session.
+    </p>
+    <noscript>
+      <p>The moderation tool needs JavaScript.</p>
+    </noscript>
+
+    <p class="callout callout--warn" data-unconfigured hidden>
+      Moderation isn't configured on this deployment. Set <code>ADMIN_PASSWORD_HASH</code> and
+      <code>SESSION_SECRET</code> (see the README).
+    </p>
+    <p class="callout callout--warn" data-offline hidden>
+      The moderation API isn't reachable.
+    </p>
+
+    <form class="admin__login panel" data-login hidden>
+      <h2 class="h3">Sign in</h2>
+      <div class="field">
+        <label for="admin-pw">Password</label>
+        <input
+          id="admin-pw"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+      <p class="error-text" role="alert" data-login-error></p>
+      <button class="btn btn--primary" type="submit">
+        Sign in
+      </button>
+    </form>
+
+    <div data-app hidden>
+      <div class="admin__bar">
+        <div class="chips" role="tablist" aria-label="Feedback by status" data-tabs></div>
+        <div class="meta-row">
+          <label class="visually-hidden" for="admin-vis">
+            Visibility
+          </label>
+          <select id="admin-vis" data-vis>
+            <option value="">Public and private</option>
+            <option value="public">Public only</option>
+            <option value="private">Private reports only</option>
+          </select>
+          <button class="btn btn--small" type="button" data-purge>
+            Run retention purge
+          </button>
+          <button class="btn btn--small" type="button" data-logout>
+            Sign out
+          </button>
+        </div>
+      </div>
+      <p class="mono hint" role="status" aria-live="polite" data-status></p>
+      <ol class="admin__list" data-list></ol>
+      <div class="meta-row" data-pager>
+        <button class="btn btn--small" type="button" data-prev>
+          Previous page
+        </button>
+        <span class="mono hint" data-page></span>
+        <button class="btn btn--small" type="button" data-next>
+          Next page
+        </button>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const STATUSES = ['pending', 'approved', 'hidden', 'rejected', 'spam', 'removed'] as const;
+  const ACTIONS_FOR: Record<string, string[]> = {
+    pending: ['approve', 'reject', 'spam', 'remove'],
+    approved: ['hide', 'remove'],
+    hidden: ['approve', 'remove'],
+    rejected: ['restore', 'remove'],
+    spam: ['restore', 'remove'],
+    removed: [],
+  };
+  const LABEL: Record<string, string> = {
+    approve: 'Approve (publish)',
+    reject: 'Reject',
+    spam: 'Mark spam',
+    remove: 'Remove and erase',
+    hide: 'Hide',
+    restore: 'Back to pending',
+  };
+  type Item = {
+    id: string;
+    createdAt: string;
+    type: string;
+    project: string;
+    visibility: 'public' | 'private';
+    status: string;
+    title: string | null;
+    message: string | null;
+    displayName: string | null;
+    email: string | null;
+    details: string | null;
+    reply: string | null;
+    purgedAt: string | null;
+  };
+
+  const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const login = $<HTMLFormElement>('[data-login]');
+  const app = $('[data-app]');
+  const tabs = $('[data-tabs]');
+  const list = $<HTMLOListElement>('[data-list]');
+  const status = $('[data-status]');
+  const vis = $<HTMLSelectElement>('[data-vis]');
+  let csrf = '';
+  let current = 'pending';
+  let page = 1;
+
+  const el = (tag: string, text?: string, cls?: string) => {
+    const n = document.createElement(tag);
+    if (text != null) n.textContent = text;
+    if (cls) n.className = cls;
+    return n;
+  };
+
+  async function api(path: string, init: RequestInit = {}) {
+    const res = await fetch(path, {
+      ...init,
+      credentials: 'same-origin',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'x-csrf-token': csrf,
+        ...(init.headers ?? {}),
+      },
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401) showLogin();
+    return { res, data };
+  }
+
+  function showLogin() {
+    app.hidden = true;
+    login.hidden = false;
+    $<HTMLInputElement>('#admin-pw').focus();
+  }
+
+  function renderTabs(counts: { status: string; visibility: string; n: number }[]) {
+    tabs.replaceChildren();
+    for (const s of STATUSES) {
+      const n = counts
+        .filter((c) => c.status === s && (!vis.value || c.visibility === vis.value))
+        .reduce((a, c) => a + c.n, 0);
+      const b = el('button', `${s} (${n})`, 'chip') as HTMLButtonElement;
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', String(s === current));
+      b.setAttribute('aria-pressed', String(s === current));
+      b.addEventListener('click', () => {
+        current = s;
+        page = 1;
+        load();
+      });
+      tabs.append(b);
+    }
+  }
+
+  function renderItem(it: Item) {
+    const li = el('li', undefined, 'admin__item panel');
+    const meta = el(
+      'p',
+      `${it.type} · ${it.project} · ${it.visibility.toUpperCase()} · ${new Date(it.createdAt).toLocaleString()} · ${it.id}`,
+      'mono hint',
+    );
+    li.append(meta);
+    if (it.purgedAt)
+      li.append(el('p', `Content erased ${new Date(it.purgedAt).toLocaleString()}.`, 'hint'));
+    if (it.title) li.append(el('p', it.title, 'admin__title'));
+    if (it.message) li.append(el('p', it.message, 'admin__msg'));
+    if (it.details) {
+      try {
+        const d = JSON.parse(it.details) as Record<string, string>;
+        const dl = el('dl', undefined, 'spec');
+        for (const [k, v] of Object.entries(d)) dl.append(el('dt', k), el('dd', v));
+        li.append(dl);
+      } catch {
+        /* ignore malformed details */
+      }
+    }
+    li.append(
+      el(
+        'p',
+        `From: ${it.displayName || 'Anonymous'}${it.email ? ` · reply email (private): ${it.email}` : ''}`,
+        'hint',
+      ),
+    );
+
+    const actions = el('div', undefined, 'meta-row');
+    for (const a of ACTIONS_FOR[it.status] ?? []) {
+      if (a === 'approve' && it.visibility === 'private') continue;
+      const b = el('button', LABEL[a], 'btn btn--small') as HTMLButtonElement;
+      b.type = 'button';
+      b.addEventListener('click', () => act(it.id, a));
+      actions.append(b);
+    }
+    li.append(actions);
+
+    if (it.status !== 'removed') {
+      const id = `reply-${it.id}`;
+      const lab = el(
+        'label',
+        it.visibility === 'public'
+          ? 'Public reply (shown under the approved comment)'
+          : 'Note (private reports never show replies publicly)',
+      ) as HTMLLabelElement;
+      lab.htmlFor = id;
+      const ta = el('textarea') as HTMLTextAreaElement;
+      ta.id = id;
+      ta.rows = 2;
+      ta.maxLength = 2000;
+      ta.value = it.reply ?? '';
+      const save = el('button', 'Save reply', 'btn btn--small') as HTMLButtonElement;
+      save.type = 'button';
+      save.addEventListener('click', () => act(it.id, 'reply', ta.value));
+      const f = el('div', undefined, 'field admin__reply');
+      f.append(lab, ta, save);
+      li.append(f);
+    }
+    return li;
+  }
+
+  async function act(id: string, action: string, reply?: string) {
+    if (
+      action === 'remove' &&
+      !window.confirm('Remove this item and erase its content? This cannot be undone.')
+    )
+      return;
+    status.textContent = 'Working…';
+    const { res, data } = await api(`/api/admin/feedback/${encodeURIComponent(id)}`, {
+      method: 'POST',
+      body: JSON.stringify({ action, reply }),
+    });
+    status.textContent = res.ok
+      ? `Done: ${action} on ${id}.`
+      : `Failed: ${data.error ?? res.status}`;
+    if (res.ok) load(false);
+  }
+
+  async function load(announce = true) {
+    if (announce) status.textContent = 'Loading…';
+    const qs = new URLSearchParams({ status: current, page: String(page) });
+    if (vis.value) qs.set('visibility', vis.value);
+    const { res, data } = await api(`/api/admin/feedback?${qs}`);
+    if (!res.ok) {
+      if (res.status !== 401) status.textContent = `Couldn't load: ${data.error ?? res.status}`;
+      return;
+    }
+    renderTabs(data.counts);
+    list.replaceChildren(...(data.items as Item[]).map(renderItem));
+    if (!data.items.length) list.append(el('li', `Nothing ${current}.`, 'hint'));
+    $('[data-page]').textContent = `Page ${data.page} of ${data.pages}`;
+    $<HTMLButtonElement>('[data-prev]').disabled = data.page <= 1;
+    $<HTMLButtonElement>('[data-next]').disabled = data.page >= data.pages;
+    if (announce)
+      status.textContent = `${data.total} ${current} item${data.total === 1 ? '' : 's'}.`;
+  }
+
+  login.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = $<HTMLInputElement>('#admin-pw');
+    const err = $('[data-login-error]');
+    err.textContent = '';
+    const { res, data } = await api('/api/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ password: pw.value }),
+    });
+    pw.value = '';
+    if (!res.ok) {
+      err.textContent = data.error ?? 'Sign-in failed.';
+      return;
+    }
+    csrf = data.csrf;
+    login.hidden = true;
+    app.hidden = false;
+    load();
+  });
+  $('[data-logout]').addEventListener('click', async () => {
+    await api('/api/admin/logout', { method: 'POST' });
+    csrf = '';
+    showLogin();
+  });
+  $('[data-purge]').addEventListener('click', async () => {
+    const { res } = await api('/api/admin/purge', { method: 'POST' });
+    status.textContent = res.ok ? 'Retention purge finished.' : 'Purge failed.';
+    load(false);
+  });
+  $('[data-prev]').addEventListener('click', () => {
+    page = Math.max(1, page - 1);
+    load();
+  });
+  $('[data-next]').addEventListener('click', () => {
+    page += 1;
+    load();
+  });
+  vis.addEventListener('change', () => {
+    page = 1;
+    load();
+  });
+
+  (async () => {
+    try {
+      const res = await fetch('/api/admin/session', { headers: { accept: 'application/json' } });
+      const data = await res.json();
+      if (!data.configured) {
+        $('[data-unconfigured]').hidden = false;
+        return;
+      }
+      if (data.authenticated) {
+        csrf = data.csrf;
+        app.hidden = false;
+        load();
+      } else showLogin();
+    } catch {
+      $('[data-offline]').hidden = false;
+    }
+  })();
+</script>
+
+<style>
+  .admin__login {
+    max-width: 26rem;
+  }
+  .admin__bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: space-between;
+    align-items: center;
+    margin: var(--space-5) 0;
+  }
+  .admin__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .admin :global(.admin__title) {
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+  }
+  .admin :global(.admin__msg) {
+    white-space: pre-wrap;
+  }
+  .admin :global(.admin__reply) {
+    margin: var(--space-4) 0 0;
+  }
+  .h3 {
+    font-size: var(--step-1);
+  }
+</style>

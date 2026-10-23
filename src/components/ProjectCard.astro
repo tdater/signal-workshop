@@ -1,0 +1,150 @@
+---
+import type { Project, Release } from '../lib/content';
+import { editionName, stateLabel } from '../lib/content';
+import Motif from './Motif.astro';
+
+interface Props {
+  project: Project;
+  current: Release[];
+  headingLevel?: 'h2' | 'h3';
+}
+const { project: p, current, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+const shot = p.media.find((m) => m.kind === 'screenshot' || m.kind === 'banner');
+---
+
+<article
+  class="pcard"
+  style={`--accent:${p.accent}`}
+  data-project={p.slug}
+  data-tags={p.tags.join(' ')}
+  data-platforms={p.platforms.join('|')}
+  data-state={p.state}
+  data-search={`${p.title} ${p.tagline} ${p.summary} ${p.category.join(' ')} ${p.platforms.join(' ')} ${p.tags.join(' ')}`.toLowerCase()}
+>
+  <Motif kind={p.motif} />
+  <div class="pcard__body">
+    <div class="pcard__top">
+      {p.icon ? (
+        <img class="pcard__icon" src={p.icon.src} alt="" width="56" height="56" loading="lazy" />
+      ) : (
+        <span class="pcard__icon pcard__icon--mono" aria-hidden="true">
+          {p.title.slice(0, 2)}
+        </span>
+      )}
+      <div>
+        <H class="pcard__title">
+          <a href={`/projects/${p.slug}`}>{p.title}</a>
+        </H>
+        <div class="meta-row">
+          <span class:list={['badge', p.state === 'released' ? 'badge--live' : 'badge--dev']}>
+            {stateLabel[p.state]}
+          </span>
+          {current.map((r) => (
+            <span class="badge">
+              {editionName(p, r.edition)} v{r.version}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+    <p class="pcard__tagline">{p.tagline}</p>
+    <p class="pcard__platforms mono">{p.platforms.join(' · ')}</p>
+    {shot && (
+      <img
+        class="pcard__shot"
+        src={shot.thumb ?? shot.src}
+        alt={shot.alt}
+        width={shot.thumb ? 560 : shot.width}
+        height={shot.thumb ? Math.round((shot.height * 560) / shot.width) : shot.height}
+        loading="lazy"
+        decoding="async"
+      />
+    )}
+    <div class="pcard__actions">
+      <a class="btn btn--small" href={`/projects/${p.slug}`}>
+        Read about {p.title}
+      </a>
+      {current.length > 0 && (
+        <a class="btn btn--small" href={`/downloads#${p.slug}`}>
+          Downloads
+        </a>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--dur) var(--ease);
+  }
+  .pcard:hover,
+  .pcard:focus-within {
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+  }
+  .pcard__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 1;
+  }
+  .pcard__top {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  .pcard__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    flex: none;
+  }
+  .pcard__icon--mono {
+    display: grid;
+    place-items: center;
+    background: var(--surface-1);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font: 800 1.1rem var(--font-mono);
+  }
+  .pcard__title {
+    font-size: var(--step-2);
+    margin: 0 0 var(--space-2);
+  }
+  .pcard__title a {
+    text-decoration: none;
+  }
+  .pcard__title a:hover {
+    color: var(--accent);
+  }
+  .pcard__tagline {
+    color: var(--text-2);
+    margin: 0;
+  }
+  .pcard__platforms {
+    font-size: 0.8rem;
+    color: var(--text-3);
+    margin: 0;
+  }
+  .pcard__shot {
+    border-radius: var(--radius-s);
+    border: 1px solid var(--line);
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top;
+    width: 100%;
+  }
+  .pcard__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: auto;
+  }
+</style>

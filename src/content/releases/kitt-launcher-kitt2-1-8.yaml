@@ -1,0 +1,33 @@
+project: kitt-launcher
+edition: kitt2
+version: '1.8'
+channel: release
+date: '2026-10-19'
+current: true
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/KITT-Launcher.2-releases/releases/download/v1.8/KITT-Launcher.2-v1.8.apk
+  filename: KITT-Launcher.2-v1.8.apk
+  type: Android APK
+  bytes: 34610814
+  sha256: 68b8a989e8decc2765c9401081417a74ddfdcc542e5858105ca8f2525f52e240
+  checksumSource: GitHub release asset digest, matched by downloading the file anonymously on 2026-10-23
+minimum: Android 7.0+ head unit, 7–10" landscape
+platforms:
+  - Android head unit
+notes:
+  - Offline "Hey KITT" and quick commands like "KITT, pause music" or "KITT, find gas", with no internet.
+  - 'Offline speech input: a small on-device speech model (30 MB download under KITT Config → Speech input).'
+  - Answers with no signal for common questions about engine temperature, battery, fuel, speed and fault
+    codes.
+  - Safe mode after repeated start-up crashes, a last-drive recap, a bigger driving layout, search in KITT
+    Config, beta updates and offline map files.
+  - Faster start-up and faster OBD reconnects. Fixes for downloads, alerts, sign-ins and controllers.
+  - Both editions now build from one codebase, so every update reaches both at once.
+releasePage: https://github.com/tdater/KITT-Launcher.2-releases/releases/tag/v1.8
+internal:
+  sources:
+    - 'GitHub releases API: tdater/KITT-Launcher.2-releases v1.8'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

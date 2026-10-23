@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="Feedback status" noindex description="The status of a feedback submission.">
+  <div class="wrap--narrow section">
+    <p class="eyebrow">Feedback</p>
+    <h1 data-heading>Submission status</h1>
+    <div data-body>
+      <p>
+        This page shows the result after you send the feedback form. If you got here some other way,
+        there's nothing to show. <a href="/feedback">Go to the feedback form</a>.
+      </p>
+    </div>
+    <noscript>
+      <p class="hint">
+        With JavaScript off this page can't read the result from the address bar. Look at the
+        address: <code>s=public</code> means it was stored and is waiting for review,{' '}
+        <code>s=private</code> means it was stored privately, and <code>s=error</code> means nothing
+        was stored.
+      </p>
+    </noscript>
+  </div>
+</Base>
+
+<script>
+  const p = new URLSearchParams(location.search);
+  const s = p.get('s');
+  const id = (p.get('id') ?? '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
+  const code = p.get('code');
+  const heading = document.querySelector<HTMLElement>('[data-heading]')!;
+  const body = document.querySelector<HTMLElement>('[data-body]')!;
+  const para = (t: string) => {
+    const el = document.createElement('p');
+    el.textContent = t;
+    return el;
+  };
+  const messages: Record<string, string> = {
+    '400': 'Some fields were missing or too long, or the submission looked automated.',
+    '403': 'The submission came from somewhere other than this site.',
+    '409': 'It looks like a duplicate of something sent in the last day.',
+    '429': "You've sent a lot of feedback in a short time. Please wait a while.",
+  };
+  if (s === 'public' || s === 'private') {
+    heading.textContent =
+      s === 'private' ? 'Private report received' : 'Received: waiting for review';
+    body.replaceChildren(
+      para(
+        s === 'private'
+          ? 'Your report is stored privately. Only Travis can see it, and it will never be published.'
+          : "Your feedback is stored and pending review. It isn't public yet, and it only appears on the site if it's approved.",
+      ),
+      ...(id ? [para(`Reference: ${id}`)] : []),
+    );
+  } else if (s === 'error') {
+    heading.textContent = 'Not sent';
+    body.replaceChildren(
+      para(`Nothing was stored. ${messages[code ?? ''] ?? 'Something went wrong on the server.'}`),
+      para("Use your browser's Back button to return to the form with your text."),
+    );
+  }
+</script>

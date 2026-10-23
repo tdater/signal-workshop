@@ -1,0 +1,316 @@
+---
+import type { Release, Project } from '../lib/content';
+import { channelLabel, editionName, formatBytes, formatDate } from '../lib/content';
+import { qrSvg } from '../lib/qr';
+
+interface Props {
+  release: Release;
+  project: Project;
+  installGuide?: string;
+  headingLevel?: 'h2' | 'h3';
+  compact?: boolean;
+}
+
+const { release, project, installGuide, headingLevel = 'h3', compact = false } = Astro.props;
+const H = headingLevel;
+const name = editionName(project, release.edition);
+const a = release.artifact;
+const id = compact ? `passport-${release.id}-summary` : `passport-${release.id}`;
+const qr = a ? qrSvg(a.url, `QR code for the ${name} ${release.version} download link`) : '';
+const channelClass =
+  release.channel === 'release'
+    ? 'badge--live'
+    : release.channel === 'archived'
+      ? 'badge--muted'
+      : 'badge--dev';
+---
+
+<article
+  class:list={['passport', { 'passport--compact': compact }]}
+  aria-labelledby={`${id}-title`}
+  id={id}
+>
+  <header class="passport__head">
+    <div>
+      <p class="passport__kicker mono">{compact ? 'Quick download' : 'Download passport'}</p>
+      <H class="passport__title" id={`${id}-title`}>
+        {name} <span class="mono">v{release.version}</span>
+      </H>
+    </div>
+    <span class:list={['badge', channelClass]}>{channelLabel[release.channel]}</span>
+  </header>
+
+  {release.availability === 'unavailable' || !a ? (
+    <div class="callout callout--warn">
+      <p class="callout__title">No download available</p>
+      <p>There's no approved public file for this version. See the project page for its status.</p>
+    </div>
+  ) : compact ? (
+    <>
+      <a class="btn btn--primary passport__download" href={a.url}>
+        Download APK <span class="passport__size">({formatBytes(a.bytes)})</span>
+      </a>
+      <p class="hint passport__line">
+        {formatDate(release.date)} · {release.minimum}
+      </p>
+      <a class="passport__more" href={`#passport-${release.id}`}>
+        Checksum, QR code and release notes
+      </a>
+    </>
+  ) : (
+    <>
+      <div class="passport__action">
+        <a class="btn btn--primary passport__download" href={a.url}>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+            <path
+              d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Download APK <span class="passport__size">({formatBytes(a.bytes)})</span>
+        </a>
+        <p class="hint">
+          Direct download from the official GitHub release. No sign-in, no redirects through ads.
+        </p>
+      </div>
+
+      <dl class="passport__facts">
+        <div>
+          <dt>Released</dt>
+          <dd>{formatDate(release.date)}</dd>
+        </div>
+        <div>
+          <dt>Needs</dt>
+          <dd>{release.minimum}</dd>
+        </div>
+        <div>
+          <dt>Platforms</dt>
+          <dd>{release.platforms.join(', ')}</dd>
+        </div>
+        <div>
+          <dt>File</dt>
+          <dd class="mono">{a.filename}</dd>
+        </div>
+        <div>
+          <dt>Type</dt>
+          <dd>
+            {a.type} · {formatBytes(a.bytes)} ({a.bytes.toLocaleString('en-US')} bytes)
+          </dd>
+        </div>
+      </dl>
+
+      <div class="passport__hash">
+        <p class="passport__label">SHA-256</p>
+        <code class="passport__sha" id={`${id}-sha`}>
+          {a.sha256}
+        </code>
+        <div class="meta-row">
+          <button class="btn btn--small" type="button" data-copy={a.sha256} hidden>
+            Copy checksum
+          </button>
+          <a class="hint" href="/guides/verify-a-download">
+            What a checksum does (and doesn't) prove
+          </a>
+        </div>
+        <p class="hint">Source: {a.checksumSource}.</p>
+      </div>
+
+      {
+        <div class="passport__transfer">
+          <div class="passport__qr" set:html={qr} />
+          <div>
+            <p class="passport__label">Send it to another device</p>
+            <p class="hint">
+              Scan with a phone to open the download link, or copy it into Downloader on a TV.
+            </p>
+            <label class="visually-hidden" for={`${id}-url`}>
+              Download link
+            </label>
+            <input id={`${id}-url`} type="text" readonly value={a.url} class="mono passport__url" />
+            <button class="btn btn--small" type="button" data-copy={a.url} hidden>
+              Copy link
+            </button>
+          </div>
+        </div>
+      }
+
+      <details class="passport__notes" open>
+        <summary>What's in v{release.version}</summary>
+        <ul>
+          {release.notes.map((n) => (
+            <li>{n}</li>
+          ))}
+        </ul>
+        <p>
+          <a href={release.releasePage} rel="noopener noreferrer">
+            Release page on GitHub
+          </a>
+        </p>
+      </details>
+
+      {installGuide && (
+        <p class="passport__guide">
+          <a href={`/guides/${installGuide}`}>Installation steps</a> ·{' '}
+          <a href="/guides/installing-android-apps">Installing APKs in 2026</a>
+        </p>
+      )}
+    </>
+  )}
+  <p class="visually-hidden" role="status" aria-live="polite" data-copy-status></p>
+</article>
+
+<script>
+  // Copy buttons appear only when the Clipboard API exists; the readonly field and the visible
+  // checksum still work for manual selection without it.
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+    if (!navigator.clipboard) continue;
+    btn.hidden = false;
+    btn.addEventListener('click', async () => {
+      const status = btn.closest('.passport')?.querySelector('[data-copy-status]');
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        btn.textContent = 'Copied';
+        if (status) status.textContent = 'Copied to clipboard';
+      } catch {
+        btn.textContent = 'Copy failed: select the text instead';
+      }
+      setTimeout(() => (btn.textContent = original), 2200);
+    });
+  }
+</script>
+
+<style>
+  .passport {
+    background: linear-gradient(180deg, var(--surface-3), var(--surface-2));
+    border: 1px solid var(--line-strong);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius-m);
+    padding: var(--space-5);
+    display: grid;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+  .passport__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .passport__kicker {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-2);
+    margin: 0 0 var(--space-1);
+  }
+  .passport__title {
+    font-size: var(--step-2);
+    margin: 0;
+  }
+  .passport__title .mono {
+    margin-left: 0.25em;
+    font-size: 0.6em;
+    color: var(--accent);
+  }
+  .passport__download {
+    width: 100%;
+    font-size: var(--step-1);
+    min-height: 3.25rem;
+  }
+  .passport__size {
+    font-weight: 400;
+    opacity: 0.85;
+  }
+  .passport__action .hint {
+    margin: var(--space-2) 0 0;
+  }
+  .passport__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: var(--space-3) var(--space-4);
+    margin: 0;
+  }
+  .passport__facts dt,
+  .passport__label {
+    font: 600 0.75rem/1.2 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin: 0 0 var(--space-1);
+  }
+  .passport__facts dd {
+    margin: 0;
+  }
+  .passport__sha {
+    display: block;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-2);
+    word-break: break-all;
+    user-select: all;
+  }
+  .passport__hash .hint {
+    margin: var(--space-2) 0 0;
+  }
+  .passport__transfer {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .passport__qr :global(svg) {
+    width: 8.5rem;
+    height: 8.5rem;
+    border-radius: var(--radius-s);
+  }
+  .passport__url {
+    font-size: 0.8rem;
+    margin: var(--space-2) 0;
+  }
+  @media (max-width: 26rem) {
+    .passport__transfer {
+      grid-template-columns: 1fr;
+    }
+  }
+  .passport__notes summary {
+    cursor: pointer;
+    font-weight: 700;
+    min-height: var(--target);
+    display: flex;
+    align-items: center;
+  }
+  .passport__notes ul {
+    padding-left: 1.2em;
+    color: var(--text-2);
+  }
+  .passport__guide {
+    margin: 0;
+  }
+  .passport--compact {
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+  .passport--compact .passport__title {
+    font-size: var(--step-1);
+  }
+  .passport--compact .passport__download {
+    font-size: var(--step-0);
+    min-height: var(--target);
+  }
+  .passport__line {
+    margin: 0;
+  }
+  .passport__more {
+    font-size: var(--step--1);
+    min-height: var(--target);
+    display: inline-flex;
+    align-items: center;
+  }
+</style>

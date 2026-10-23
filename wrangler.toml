@@ -1,0 +1,13 @@
+# Cloudflare Pages project config. Secrets (ADMIN_PASSWORD_HASH, SESSION_SECRET, IP_HASH_SALT)
+# are set with `wrangler pages secret put` or in the dashboard, never here.
+name = "signal-workshop"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-10-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "signal-workshop"
+# Replace with the id printed by `wrangler d1 create signal-workshop`. The placeholder works for
+# local development only.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

@@ -1,0 +1,245 @@
+---
+import type { Project, Release, Guide } from '../lib/content';
+import { editionName } from '../lib/content';
+import { problems, platformFilters } from '../data/finder';
+
+interface Props {
+  projects: Project[];
+  releases: Release[];
+  guides: Guide[];
+}
+const { projects, releases, guides } = Astro.props;
+
+const matches = (tags: readonly string[]) =>
+  projects.filter((p) => p.tags.some((t) => tags.includes(t)));
+const platformMatch = (p: Project, m: string | readonly string[]) =>
+  p.platforms.some((pl) => (Array.isArray(m) ? m.includes(pl) : pl === m));
+
+const data = projects.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  tagline: p.tagline,
+  accent: p.accent,
+  tags: p.tags,
+  platforms: platformFilters.filter((f) => platformMatch(p, f.match)).map((f) => f.id),
+  guides: guides
+    .filter((g) => g.project === p.slug)
+    .slice(0, 3)
+    .map((g) => ({ slug: g.slug, title: g.title })),
+  downloads: releases
+    .filter((r) => r.project === p.slug && r.current && r.artifact)
+    .map((r) => ({ label: `${editionName(p, r.edition)} v${r.version}`, id: r.id })),
+}));
+---
+
+<section class="finder" aria-labelledby="finder-title" data-finder>
+  <h2 id="finder-title" class="finder__title">
+    What are you trying to fix?
+  </h2>
+  <p class="hint">
+    Pick a problem, a device, or both. Matching uses each project's own tags, so there's no
+    guesswork and no AI.
+  </p>
+
+  <div class="finder__controls" hidden>
+    <fieldset class="finder__set">
+      <legend class="mono">Problem</legend>
+      <ul class="chips">
+        {problems.map((pr) => (
+          <li>
+            <button
+              type="button"
+              class="chip"
+              aria-pressed="false"
+              data-problem={pr.id}
+              data-tags={pr.tags.join(' ')}
+            >
+              {pr.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </fieldset>
+    <fieldset class="finder__set">
+      <legend class="mono">Device</legend>
+      <ul class="chips">
+        {platformFilters.map((f) => (
+          <li>
+            <button type="button" class="chip" aria-pressed="false" data-platform={f.id}>
+              {f.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </fieldset>
+    <button type="button" class="btn btn--small" data-clear>
+      Clear choices
+    </button>
+  </div>
+
+  <div class="finder__results" aria-live="polite" data-results hidden></div>
+
+  <!-- Without JavaScript the same deterministic mapping is shown as a plain list. -->
+  <dl class="finder__static">
+    {problems.map((pr) => (
+      <div>
+        <dt>{pr.label}</dt>
+        <dd>
+          {matches(pr.tags).map((p, i) => (
+            <>
+              {i > 0 && ', '}
+              <a href={`/projects/${p.slug}`}>{p.title}</a>
+            </>
+          ))}
+        </dd>
+      </div>
+    ))}
+  </dl>
+  <script type="application/json" data-finder-data set:html={JSON.stringify(data)} />
+</section>
+
+<script>
+  type Item = {
+    slug: string;
+    title: string;
+    tagline: string;
+    accent: string;
+    tags: string[];
+    platforms: string[];
+    guides: { slug: string; title: string }[];
+    downloads: { label: string; id: string }[];
+  };
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  for (const root of document.querySelectorAll<HTMLElement>('[data-finder]')) {
+    const items: Item[] = JSON.parse(root.querySelector('[data-finder-data]')!.textContent!);
+    const controls = root.querySelector<HTMLElement>('.finder__controls')!;
+    const results = root.querySelector<HTMLElement>('[data-results]')!;
+    root.querySelector<HTMLElement>('.finder__static')!.hidden = true;
+    controls.hidden = false;
+    results.hidden = false;
+    const problemBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-problem]')];
+    const platformBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-platform]')];
+
+    const render = () => {
+      const tags = problemBtns
+        .filter((b) => b.getAttribute('aria-pressed') === 'true')
+        .flatMap((b) => b.dataset.tags!.split(' '));
+      const plats = platformBtns
+        .filter((b) => b.getAttribute('aria-pressed') === 'true')
+        .map((b) => b.dataset.platform!);
+      if (!tags.length && !plats.length) {
+        results.innerHTML = `<p class="hint">Choose something above and matching projects, guides and downloads appear here.</p>`;
+        return;
+      }
+      const hits = items.filter(
+        (it) =>
+          (!tags.length || it.tags.some((t) => tags.includes(t))) &&
+          (!plats.length || it.platforms.some((p) => plats.includes(p))),
+      );
+      if (!hits.length) {
+        results.innerHTML = `<div class="panel"><p><strong>Nothing here matches that combination yet.</strong></p><p>Try a different device, or <a href="/feedback?type=idea">suggest a tool</a> for this problem.</p></div>`;
+        return;
+      }
+      results.innerHTML =
+        `<p class="mono hint">${hits.length} match${hits.length > 1 ? 'es' : ''}</p><ul class="finder__list">` +
+        hits
+          .map(
+            (it) => `<li class="finder__hit" style="--accent:${esc(it.accent)}">
+          <h3><a href="/projects/${esc(it.slug)}">${esc(it.title)}</a></h3>
+          <p>${esc(it.tagline)}</p>
+          <div class="finder__links">
+            ${it.downloads.map((d) => `<a class="btn btn--small" href="/downloads#passport-${esc(d.id)}">Get ${esc(d.label)}</a>`).join('')}
+            ${it.guides.map((g) => `<a href="/guides/${esc(g.slug)}">${esc(g.title)}</a>`).join('')}
+          </div></li>`,
+          )
+          .join('') +
+        '</ul>';
+    };
+    for (const b of [...problemBtns, ...platformBtns])
+      b.addEventListener('click', () => {
+        b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'));
+        render();
+      });
+    root.querySelector('[data-clear]')!.addEventListener('click', () => {
+      for (const b of [...problemBtns, ...platformBtns]) b.setAttribute('aria-pressed', 'false');
+      render();
+    });
+    render();
+  }
+</script>
+
+<style>
+  .finder {
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+  }
+  .finder__title {
+    font-size: var(--step-2);
+  }
+  .finder__set {
+    border: 0;
+    padding: 0;
+    margin: var(--space-4) 0;
+  }
+  .finder__set legend {
+    font-size: var(--step--1);
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+  }
+  .finder__results {
+    margin-top: var(--space-5);
+    border-top: 1px dashed var(--line-strong);
+    padding-top: var(--space-5);
+  }
+  .finder__results :global(.finder__list) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+  .finder__results :global(.finder__hit) {
+    border-left: 3px solid var(--accent);
+    background: var(--surface-2);
+    border-radius: var(--radius-s);
+    padding: var(--space-4);
+  }
+  .finder__results :global(.finder__hit h3) {
+    margin-bottom: var(--space-2);
+  }
+  .finder__results :global(.finder__hit p) {
+    color: var(--text-2);
+    font-size: var(--step--1);
+  }
+  .finder__results :global(.finder__links) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    align-items: center;
+    font-size: var(--step--1);
+  }
+  .finder__results :global(.finder__links a:not(.btn)) {
+    min-height: var(--target);
+    display: inline-flex;
+    align-items: center;
+  }
+  .finder__static {
+    margin: var(--space-4) 0 0;
+  }
+  .finder__static > div {
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .finder__static dt {
+    font-weight: 700;
+  }
+  .finder__static dd {
+    margin: 0;
+  }
+</style>
