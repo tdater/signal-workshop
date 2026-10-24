@@ -25,7 +25,10 @@ plan, the API returns errors until the daily reset; static pages and downloads k
   `CREATE TABLE IF NOT EXISTS d1_migrations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL); INSERT INTO d1_migrations (name) VALUES ('0001_init.sql');`
 - The site deploys through the Pages Git integration (Workers & Pages → signal-workshop), because
   the build sandbox can't reach the Cloudflare API. Preview builds come from non-production
-  branches; `main` is the production branch.
+  branches; `main` is the production branch. Pushing to a branch starts its build (the Pages
+  dashboard has no manual "create deployment" for Git projects). When creating the project, use
+  the **Pages** flow ("Looking to deploy Pages? Get started"), not the Workers "Create an app" flow,
+  whose `wrangler deploy` command doesn't fit this project.
 
 ## First deployment (one time, about 15 minutes)
 
