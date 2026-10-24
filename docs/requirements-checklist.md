@@ -86,6 +86,7 @@ Legend: ✅ built and tested · 🟡 built, partly verified · ⛔ blocked on ow
 - Browsers other than Chromium (Firefox and WebKit were not run).
 - Real Android phones, TVs or head units opening the site or installing from it.
 - Manual screen-reader testing (NVDA, VoiceOver, TalkBack).
-- Anything on Cloudflare itself: production D1, secrets, headers on the real edge, free-plan
-  limits under load.
+- On Cloudflare: the preview build, D1 and owner sign-in were confirmed working by Travis on
+  2026-10-24 (manual check). Not verified: response headers/CSP on the edge (this sandbox can't
+  reach pages.dev), free-plan limits under load, and the production branch.
 - Real-user performance data.
