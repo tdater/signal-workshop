@@ -16,6 +16,17 @@ quota.
 Expected cost at personal-site traffic: $0. If the daily Functions or D1 limit is hit on the free
 plan, the API returns errors until the daily reset; static pages and downloads keep working.
 
+## Current setup (2026-10-24)
+
+- D1 database `signal-workshop` was created in the dashboard and `migrations/0001_init.sql` was
+  run by hand in the D1 console, so wrangler's migration history doesn't know about it. Before the
+  first `npm run db:migrate:remote` for a future migration, mark 0001 as applied by running this
+  once in the D1 console:
+  `CREATE TABLE IF NOT EXISTS d1_migrations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL); INSERT INTO d1_migrations (name) VALUES ('0001_init.sql');`
+- The site deploys through the Pages Git integration (Workers & Pages → signal-workshop), because
+  the build sandbox can't reach the Cloudflare API. Preview builds come from non-production
+  branches; `main` is the production branch.
+
 ## First deployment (one time, about 15 minutes)
 
 Run from the repo root on a machine with Node 22.12+. Each step is copy and paste.

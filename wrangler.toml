@@ -7,7 +7,7 @@ compatibility_date = "2026-10-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "signal-workshop"
-# Replace with the id printed by `wrangler d1 create signal-workshop`. The placeholder works for
-# local development only.
-database_id = "00000000-0000-0000-0000-000000000000"
+# Production D1 database (created 2026-10-24). Not a secret. Local development and tests use a
+# local copy under .wrangler/, never this database.
+database_id = "43b21d89-ac26-43b3-86ef-db4818ed8539"
 migrations_dir = "migrations"
