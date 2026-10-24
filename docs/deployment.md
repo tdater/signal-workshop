@@ -23,6 +23,9 @@ plan, the API returns errors until the daily reset; static pages and downloads k
   first `npm run db:migrate:remote` for a future migration, mark 0001 as applied by running this
   once in the D1 console:
   `CREATE TABLE IF NOT EXISTS d1_migrations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL); INSERT INTO d1_migrations (name) VALUES ('0001_init.sql');`
+- Secrets set in the dashboard (Settings → Variables and Secrets) are per environment. Add
+  them under both **Production** and **Preview**; a preview build with Production-only secrets
+  shows "Moderation isn't configured". Secrets reach only builds started after they're saved.
 - The site deploys through the Pages Git integration (Workers & Pages → signal-workshop), because
   the build sandbox can't reach the Cloudflare API. Preview builds come from non-production
   branches; `main` is the production branch. Pushing to a branch starts its build (the Pages
