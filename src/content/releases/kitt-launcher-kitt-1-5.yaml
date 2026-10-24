@@ -1,0 +1,26 @@
+project: kitt-launcher
+edition: kitt
+version: '1.5'
+channel: archived
+date: '2026-10-11'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/KITT-Launcher-releases/releases/download/v1.5/KITT-Launcher-v1.5.apk
+  filename: KITT-Launcher-v1.5.apk
+  type: Android APK
+  bytes: 10431731
+  sha256: c444aa851d426d6eb3dbb8637fc9977c426aab4363a4cf0ff7afefe5e19623cc
+  checksumSource: GitHub release asset digest
+minimum: Android 7.0+ head unit, portrait 11–13" recommended
+platforms:
+  - Android head unit
+notes:
+  - 'OBD Bluetooth: show what the head unit hides, and connect by address'
+releasePage: https://github.com/tdater/KITT-Launcher-releases/releases/tag/v1.5
+internal:
+  sources:
+    - 'GitHub releases API: tdater/KITT-Launcher-releases v1.5'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

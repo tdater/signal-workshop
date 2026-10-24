@@ -1,0 +1,48 @@
+# Copy to src/content/projects/<slug>.yaml. The file name must equal `slug`.
+# Every field is checked at build time (src/content.config.ts); the build tells you what's wrong.
+slug: my-project # lowercase-kebab-case, never change it after launch (it's the URL)
+title: My Project
+tagline: One sentence, 140 characters max, saying what it does for whom.
+published: false # true makes it public on the next build
+order: 4 # position in lists, lowest first
+state: active-development # released | active-development | experimental | archived | planned
+stateNote: One honest sentence about where it stands.
+accent: '#5cf2c8' # page accent colour; check contrast against the dark background
+motif: trace # scanner | crt | trace (the decorative strip on the project page)
+# icon: { src: /media/icons/my-project.png, alt: My Project app icon }
+category: [Android]
+platforms: [Android phone]
+tags: [handoff] # reuse existing tags so the Project Finder can match; see src/data/finder.ts
+summary: >-
+  Two to four sentences: what it is and what it actually does today.
+audience:
+  - Who it's for, in plain words.
+problem: >-
+  The real frustration that started it.
+why: >-
+  Why it's built the way it is.
+story: # Decision Trail. Only real, dated events with evidence. Leave [] if unsure.
+  - date: '2026-01-01'
+    title: v1.0, what changed
+    body: What happened and why.
+    evidence: GitHub release v1.0
+capabilities:
+  - group: Main things it does
+    items:
+      - A shipped capability, stated plainly.
+integrations: [] # - { name: Service, note: what it's used for and whether it needs an account }
+requirements:
+  - { label: Android, value: '10 or newer' }
+permissions: [] # - { name: Microphone, why: Voice commands. Only while listening. }
+limitations:
+  - A real limitation or known issue.
+editions: [] # only if there are several builds: - { id: lite, name: My Project Lite, fit: who should pick it }
+mediaNote: No screenshots yet. # shown when media is empty
+media: [] # see docs/content-workflow.md "Media"
+setupTrail: # Guided Setup Trail. `guide` must be a published guide slug.
+  - { id: install, title: Install the APK, detail: One line., guide: installing-android-apps }
+support: >-
+  How to get help: the feedback form, and what kind of response to expect.
+internal: # never published; for your own records
+  sources: [Where these facts came from]
+  verified: '2026-01-01'

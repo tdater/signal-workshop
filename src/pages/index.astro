@@ -1,0 +1,222 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectFinder from '../components/ProjectFinder.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import {
+  getProjects,
+  getReleases,
+  getGuides,
+  currentReleases,
+  editionName,
+  formatDate,
+  channelLabel,
+} from '../lib/content';
+
+const projects = await getProjects();
+const releases = await getReleases();
+const guides = await getGuides();
+const log = releases.filter((r) => r.channel !== 'archived' || r.date >= '2026-10-11').slice(0, 8);
+const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
+---
+
+<Base
+  title="Home"
+  description="Practical Android tools by Travis Dater: KITT Launcher for car head units, RetroTV for Android TV, and BLACKBOX for troubleshooting. Guides, FAQ and verified downloads."
+>
+  <section class="hero wrap">
+    <div class="hero__text">
+      <p class="eyebrow">Signal Workshop · personal projects</p>
+      <h1>Tools for real problems, built by a sysadmin who can't leave things alone.</h1>
+      <p class="lede">
+        Android apps for car head units, TVs and troubleshooting. Each one started with something
+        that didn't work the way it should. Here's what they do, how to set them up, and where to
+        get a current release you can check.
+      </p>
+      <div class="meta-row">
+        <a class="btn btn--primary" href="#finder-title">
+          Find a tool for your problem
+        </a>
+        <a class="btn" href="/downloads">
+          Go straight to downloads
+        </a>
+      </div>
+    </div>
+    <ol class="hero__signal" aria-label="How the projects are organised">
+      <li>
+        <span class="mono">problem</span> Something annoying, specific and real
+      </li>
+      <li>
+        <span class="mono">tool</span> An app that deals with it, with its limits stated
+      </li>
+      <li>
+        <span class="mono">result</span> A release you can download and verify
+      </li>
+    </ol>
+  </section>
+
+  <div class="wrap section">
+    <ProjectFinder projects={projects} releases={releases} guides={guides} />
+  </div>
+
+  <section class="wrap section" aria-labelledby="projects-title">
+    <div class="section__head">
+      <h2 id="projects-title">The projects</h2>
+      <a href="/projects">Browse and filter all projects</a>
+    </div>
+    <div class="grid-cards">
+      {projects.map((p) => (
+        <ProjectCard project={p} current={currentReleases(releases, p.slug)} />
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="log-title">
+    <div class="section__head">
+      <h2 id="log-title">Release log</h2>
+      <a href="/downloads">All downloads</a>
+    </div>
+    <p class="hint">
+      Straight from the published GitHub releases. Each line is a real file you can download.
+    </p>
+    <ol class="log">
+      {log.map((r) => (
+        <li class="log__row" style={`--accent:${bySlug[r.project].accent}`}>
+          <time class="mono" datetime={r.date}>
+            {formatDate(r.date)}
+          </time>
+          <a href={`/projects/${r.project}`} class="log__name">
+            {editionName(bySlug[r.project], r.edition)} v{r.version}
+          </a>
+          <span class="log__note">{r.notes[0]}</span>
+          <span class="badge">{channelLabel[r.channel]}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap section help" aria-labelledby="help-title">
+    <h2 id="help-title">Already using one?</h2>
+    <div class="grid-cards">
+      <a class="panel help__card" href="/guides">
+        <strong>Guides</strong>
+        <span>Setup, pairing, controllers, API keys, step by step.</span>
+      </a>
+      <a class="panel help__card" href="/faq">
+        <strong>FAQ</strong>
+        <span>Searchable answers by project and symptom.</span>
+      </a>
+      <a class="panel help__card" href="/feedback">
+        <strong>Feedback</strong>
+        <span>Bug reports, ideas and respectful complaints.</span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: end;
+    padding-block: clamp(2.5rem, 6vw, 5.5rem) var(--space-6);
+  }
+  .hero h1 {
+    max-width: 18ch;
+  }
+  .hero__signal {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 var(--space-5);
+    border-left: 2px solid var(--signal);
+    display: grid;
+    gap: var(--space-4);
+    color: var(--text-2);
+  }
+  .hero__signal li {
+    position: relative;
+  }
+  .hero__signal li::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-5) - 7px);
+    top: 0.35rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--signal);
+  }
+  .hero__signal .mono {
+    display: block;
+    color: var(--signal);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  @media (max-width: 52rem) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+  }
+  .section__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+  .section__head h2 {
+    margin: 0;
+  }
+  .log {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+  .log__row {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(10rem, 14rem) 1fr auto;
+    gap: var(--space-4);
+    align-items: baseline;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .log__row time {
+    color: var(--text-2);
+    font-size: 0.85rem;
+  }
+  .log__name {
+    font-weight: 700;
+    text-decoration-color: var(--accent);
+  }
+  .log__note {
+    color: var(--text-2);
+    font-size: var(--step--1);
+  }
+  @media (max-width: 52rem) {
+    .log__row {
+      grid-template-columns: 1fr auto;
+      gap: var(--space-1) var(--space-3);
+    }
+    .log__note {
+      grid-column: 1 / -1;
+    }
+    .log__row time {
+      grid-column: 1 / -1;
+    }
+  }
+  .help__card {
+    display: grid;
+    gap: var(--space-2);
+    text-decoration: none;
+  }
+  .help__card span {
+    color: var(--text-2);
+  }
+  .help__card:hover {
+    border-color: var(--signal);
+  }
+</style>

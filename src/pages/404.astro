@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { getProjects } from '../lib/content';
+const projects = await getProjects();
+---
+
+<Base title="Not found" noindex description="This page doesn't exist.">
+  <div class="wrap--narrow section">
+    <p class="eyebrow">404 · no signal</p>
+    <h1>Nothing on this channel.</h1>
+    <p class="lede">
+      The page you asked for doesn't exist, or it moved. Here's where things actually are:
+    </p>
+    <form action="/search" method="get" role="search" class="nf-search">
+      <label for="nf-q">Search the site</label>
+      <div class="meta-row">
+        <input id="nf-q" name="q" type="search" />
+        <button class="btn" type="submit">
+          Search
+        </button>
+      </div>
+    </form>
+    <ul>
+      {projects.map((p) => (
+        <li>
+          <a href={`/projects/${p.slug}`}>{p.title}</a>
+        </li>
+      ))}
+      <li>
+        <a href="/downloads">Downloads</a>
+      </li>
+      <li>
+        <a href="/guides">Guides</a> and <a href="/faq">FAQ</a>
+      </li>
+      <li>
+        <a href="/">Home</a>
+      </li>
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .nf-search {
+    margin: var(--space-5) 0;
+  }
+  .nf-search input {
+    flex: 1;
+    min-width: 12rem;
+  }
+</style>

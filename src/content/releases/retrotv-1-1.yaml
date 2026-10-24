@@ -1,0 +1,29 @@
+project: retrotv
+version: '1.1'
+channel: archived
+date: '2026-10-19'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/RetroTV-releases/releases/download/v1.1/RetroTV-v1.1.apk
+  filename: RetroTV-v1.1.apk
+  type: Android APK
+  bytes: 8713508
+  sha256: c3181263990fc88a809611ab69423b0fc8ccda3c2ede340e75ea0981a29d305e
+  checksumSource: GitHub release asset digest
+minimum: Android 7.0+ (Android TV, Google TV, Fire TV)
+platforms:
+  - Android TV
+  - Google TV
+  - Fire TV
+notes:
+  - 'View width script: watch the document node and attribute changes, re-apply after start-up'
+  - Fix input listener override
+  - Built-in EmulatorJS player, ad-script stand-ins, Auto controller mode, real desktop/TV views
+releasePage: https://github.com/tdater/RetroTV-releases/releases/tag/v1.1
+internal:
+  sources:
+    - 'GitHub releases API: tdater/RetroTV-releases v1.1'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

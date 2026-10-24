@@ -1,0 +1,11 @@
+dist
+node_modules
+.astro
+.wrangler
+public/media
+package-lock.json
+docs/research
+docs/project-brief.md
+functions/_lib/project-ids.ts
+test-results
+playwright-report

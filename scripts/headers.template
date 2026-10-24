@@ -1,0 +1,25 @@
+/*
+  Content-Security-Policy: __CSP__
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  X-Frame-Options: DENY
+  Strict-Transport-Security: max-age=31536000
+
+/admin
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+/feedback/received
+  X-Robots-Tag: noindex
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/media/*
+  Cache-Control: public, max-age=604800
+
+# Preview deployments (<hash>.<project>.pages.dev) are never indexed.
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow

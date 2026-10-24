@@ -1,0 +1,29 @@
+project: blackbox
+edition: blackbox
+version: 0.2.1
+channel: beta
+date: '2026-10-20'
+current: true
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/BLACKBOX-releases/releases/download/v0.2.1/BLACKBOX-0.2.1.apk
+  filename: BLACKBOX-0.2.1.apk
+  type: Android APK
+  bytes: 131354402
+  sha256: 083f22acc93634b61207e3f07c40131807d4d8ace3e6999c0f2e09e0c65318cb
+  checksumSource: GitHub release asset digest, matched by downloading the file anonymously on 2026-10-23
+minimum: Android 10+
+platforms:
+  - Android phone
+  - Foldable
+notes:
+  - 'BLACKBOX Net: an optional separate edition with ping, port check and DNS tools. It is the only edition
+    with internet permission and installs alongside the regular app with its own records.'
+  - The regular edition never uses the internet.
+releasePage: https://github.com/tdater/BLACKBOX-releases/releases/tag/v0.2.1
+internal:
+  sources:
+    - 'GitHub releases API: tdater/BLACKBOX-releases v0.2.1'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

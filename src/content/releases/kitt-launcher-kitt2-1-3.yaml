@@ -1,0 +1,26 @@
+project: kitt-launcher
+edition: kitt2
+version: '1.3'
+channel: archived
+date: '2026-10-11'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/KITT-Launcher.2-releases/releases/download/v1.3/KITT-Launcher.2-v1.3.apk
+  filename: KITT-Launcher.2-v1.3.apk
+  type: Android APK
+  bytes: 10431727
+  sha256: c7a960026faad3e11cbb7b2e2a69431b3580bbef9949c403e2abb4b0223f939f
+  checksumSource: GitHub release asset digest
+minimum: Android 7.0+ head unit, 7–10" landscape
+platforms:
+  - Android head unit
+notes:
+  - 'OBD Bluetooth: show what the head unit hides, and connect by address'
+releasePage: https://github.com/tdater/KITT-Launcher.2-releases/releases/tag/v1.3
+internal:
+  sources:
+    - 'GitHub releases API: tdater/KITT-Launcher.2-releases v1.3'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

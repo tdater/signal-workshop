@@ -1,0 +1,27 @@
+# Copy to src/content/releases/<project>-<edition>-<version with dashes>.yaml,
+# e.g. retrotv-1-3.yaml or kitt-launcher-kitt2-1-9.yaml.
+# Set the previous release's `current: false` and `channel: archived` in the same change.
+project: my-project # an existing project slug
+# edition: lite # only if the project lists editions
+version: '1.0' # MAJOR.MINOR or MAJOR.MINOR.PATCH
+channel: release # release | beta | experimental | archived
+date: '2026-01-01' # release date
+current: true # exactly one current release per project edition (a test enforces it)
+availability: available # available | unavailable (unavailable needs no artifact)
+publicationApproved: true # false keeps it off the site; only true for files you've published yourself
+artifact:
+  # Direct public download. Must be https, end in .apk, and carry no tokens. Never an .aab.
+  url: https://github.com/tdater/My-Project-releases/releases/download/v1.0/MyProject-1.0.apk
+  filename: MyProject-1.0.apk
+  type: Android APK
+  bytes: 12345678 # exact size; the release page or `stat -c %s file.apk`
+  sha256: 'REPLACE-with-sha256sum-output' # keep the quotes; the build fails until this is a real 64-char hash
+  checksumSource: GitHub release asset digest
+minimum: Android 10+
+platforms: [Android phone]
+notes:
+  - One line per user-visible change.
+releasePage: https://github.com/tdater/My-Project-releases/releases/tag/v1.0
+internal:
+  sources: ['GitHub releases API: tdater/My-Project-releases v1.0']
+  verified: '2026-01-01'

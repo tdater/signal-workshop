@@ -1,0 +1,118 @@
+---
+// Small decorative motif per project, drawn from the project's real subject. Purely visual.
+interface Props {
+  kind: 'scanner' | 'crt' | 'trace';
+}
+const { kind } = Astro.props;
+---
+
+<div class:list={['motif', `motif--${kind}`]} aria-hidden="true">
+  {kind === 'scanner' && (
+    <div class="scanner">
+      {Array.from({ length: 14 }, (_, i) => (
+        <span style={`--i:${i}`} />
+      ))}
+    </div>
+  )}
+  {kind === 'crt' && (
+    <div class="crt">
+      <span class="crt__pixel" />
+      <span class="crt__pixel" />
+      <span class="crt__pixel" />
+    </div>
+  )}
+  {kind === 'trace' && (
+    <svg viewBox="0 0 240 24" class="tr" preserveAspectRatio="none">
+      <path d="M4 12H236" />
+      <circle cx="16" cy="12" r="5" />
+      <circle cx="84" cy="12" r="5" />
+      <circle cx="152" cy="12" r="5" />
+      <circle cx="224" cy="12" r="5" class="tr__end" />
+    </svg>
+  )}
+</div>
+
+<style>
+  .motif {
+    height: 24px;
+    width: 100%;
+  }
+  .scanner {
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    gap: 3px;
+    height: 100%;
+    padding: 6px 8px;
+    background: #050505;
+    border-radius: 4px;
+  }
+  .scanner span {
+    background: color-mix(in srgb, var(--accent) 18%, #000);
+    border-radius: 2px;
+    animation: sweep 2.4s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.085s);
+  }
+  @keyframes sweep {
+    0%,
+    100% {
+      background: color-mix(in srgb, var(--accent) 18%, #000);
+    }
+    8% {
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+    }
+    30% {
+      background: color-mix(in srgb, var(--accent) 18%, #000);
+    }
+  }
+  .crt {
+    height: 100%;
+    border-radius: 4px;
+    background: repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--accent) 22%, #000) 0 2px,
+      #050308 2px 4px
+    );
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-left: 10px;
+  }
+  .crt__pixel {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .crt__pixel:nth-child(2) {
+    opacity: 0.7;
+  }
+  .crt__pixel:nth-child(3) {
+    opacity: 0.4;
+  }
+  .tr {
+    width: 100%;
+    height: 100%;
+  }
+  .tr path {
+    stroke: color-mix(in srgb, var(--accent) 60%, transparent);
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+  }
+  .tr circle {
+    fill: var(--bg);
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+  .tr .tr__end {
+    fill: var(--accent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scanner span {
+      animation: none;
+    }
+    .scanner span:nth-child(7) {
+      background: var(--accent);
+    }
+  }
+</style>

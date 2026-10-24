@@ -1,0 +1,28 @@
+project: kitt-launcher
+edition: kitt
+version: '1.7'
+channel: archived
+date: '2026-10-19'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/KITT-Launcher-releases/releases/download/v1.7/KITT-Launcher-v1.7.apk
+  filename: KITT-Launcher-v1.7.apk
+  type: Android APK
+  bytes: 34569278
+  sha256: 741db1f9288a90b8da15cd6534f949addbca2c401e48aa193442948666a10dda
+  checksumSource: GitHub release asset digest
+minimum: Android 7.0+ head unit, portrait 11–13" recommended
+platforms:
+  - Android head unit
+notes:
+  - 'Port from KITT Launcher.2: fixes from the cloud review'
+  - 'Port from KITT Launcher.2: OBD fixes, browser fixes, film editions, offline voice, game browser, stream
+    home'
+releasePage: https://github.com/tdater/KITT-Launcher-releases/releases/tag/v1.7
+internal:
+  sources:
+    - 'GitHub releases API: tdater/KITT-Launcher-releases v1.7'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

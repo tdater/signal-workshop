@@ -1,0 +1,28 @@
+project: retrotv
+version: '1.0'
+channel: archived
+date: '2026-10-19'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/RetroTV-releases/releases/download/v1.0/RetroTV-v1.0.apk
+  filename: RetroTV-v1.0.apk
+  type: Android APK
+  bytes: 8658839
+  sha256: 0817933c4fb0dccbb26920c6d9a95e2dd421dd68739ae31e4903e4116198c111
+  checksumSource: GitHub release asset digest
+minimum: Android 7.0+ (Android TV, Google TV, Fire TV)
+platforms:
+  - Android TV
+  - Google TV
+  - Fire TV
+notes:
+  - Fix manifest activity tag and cursor property clash
+  - 'RetroTV: Android TV browser for in-browser retro game sites'
+releasePage: https://github.com/tdater/RetroTV-releases/releases/tag/v1.0
+internal:
+  sources:
+    - 'GitHub releases API: tdater/RetroTV-releases v1.0'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

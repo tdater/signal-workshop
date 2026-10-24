@@ -1,0 +1,26 @@
+project: kitt-launcher
+edition: kitt
+version: '1.6'
+channel: archived
+date: '2026-10-11'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/KITT-Launcher-releases/releases/download/v1.6/KITT-Launcher-v1.6.apk
+  filename: KITT-Launcher-v1.6.apk
+  type: Android APK
+  bytes: 10448115
+  sha256: 3ad98901e7d45ccfc4b81a721f231ad0fcdbd589ffeec8f16ce48dcebc17f73e
+  checksumSource: GitHub release asset digest
+minimum: Android 7.0+ head unit, portrait 11–13" recommended
+platforms:
+  - Android head unit
+notes:
+  - 'Film themes: Back to the Future, deeper Terminator/RoboCop/Matrix, film characters'
+releasePage: https://github.com/tdater/KITT-Launcher-releases/releases/tag/v1.6
+internal:
+  sources:
+    - 'GitHub releases API: tdater/KITT-Launcher-releases v1.6'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

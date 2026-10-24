@@ -1,0 +1,27 @@
+project: blackbox
+edition: blackbox
+version: 0.1.0
+channel: archived
+date: '2026-10-19'
+current: false
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/BLACKBOX-releases/releases/download/v0.1.0/BLACKBOX-0.1.0.apk
+  filename: BLACKBOX-0.1.0.apk
+  type: Android APK
+  bytes: 76943436
+  sha256: 2bf951fcb4694752633cfb5a421960923c72525a2104abccf4d09b772eb4ccb9
+  checksumSource: GitHub release asset digest
+minimum: Android 10+
+platforms:
+  - Android phone
+  - Foldable
+notes:
+  - 'First release: the offline investigation workbench (projects, evidence, tests, comparisons, resume capsules, handoffs, archives) and optional on-device AI from an imported model file.'
+releasePage: https://github.com/tdater/BLACKBOX-releases/releases/tag/v0.1.0
+internal:
+  sources:
+    - 'GitHub releases API: tdater/BLACKBOX-releases v0.1.0'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

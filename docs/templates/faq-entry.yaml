@@ -1,0 +1,10 @@
+# Append to src/content/faqs.yaml (it's one list). `id` becomes the #anchor, so keep it stable.
+- id: my-question
+  question: The question, phrased the way a visitor would ask it?
+  answer: >-
+    A short, verified answer. Plain text.
+  projects: [my-project] # [] for site-wide
+  topics: [Installation]
+  links: [{ label: Install guide, href: /guides/my-guide }] # site paths or https only
+  reviewed: '2026-01-01'
+  published: true

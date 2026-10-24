@@ -1,0 +1,30 @@
+project: retrotv
+version: '1.2'
+channel: release
+date: '2026-10-19'
+current: true
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/RetroTV-releases/releases/download/v1.2/RetroTV-v1.2.apk
+  filename: RetroTV-v1.2.apk
+  type: Android APK
+  bytes: 9095173
+  sha256: 42558c0d7863c3436040af88ead404b6dd92e30b6d4e038000ad65cce70c094b
+  checksumSource: GitHub release asset digest, matched by downloading the file anonymously on 2026-10-23
+minimum: Android 7.0+ (Android TV, Google TV, Fire TV)
+platforms:
+  - Android TV
+  - Google TV
+  - Fire TV
+notes:
+  - My games library with box art, play time and favourites. Search every site at once.
+  - 'Player: rewind, CRT/LCD filters, sharp pixels, cheats, pad hotkeys, up to 4 players, offline play.'
+  - 'Phone link: phone as controller, send ROMs, backups to the phone, save sync between two TVs.'
+  - Attract mode, first-run setup, larger text and bold focus options, crash and freeze reports.
+releasePage: https://github.com/tdater/RetroTV-releases/releases/tag/v1.2
+internal:
+  sources:
+    - 'GitHub releases API: tdater/RetroTV-releases v1.2'
+  verified: '2026-10-23'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'
