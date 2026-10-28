@@ -5,7 +5,7 @@ summary: How the remote pointer, controller modes, hotkeys and phone link work.
 published: true
 project: retrotv
 topics: [Controllers, Bluetooth/BLE, Usage]
-appliesTo: RetroTV 1.2
+appliesTo: RetroTV 1.2–1.4
 time: 5 minutes
 prerequisites:
   - RetroTV installed.
@@ -43,7 +43,7 @@ troubleshooting:
     fix: Switch that site between Auto, gamepad and keyboard mode. The choice is remembered per site.
   - symptom: Phone link page won't open on the phone
     fix: The phone and TV must be on the same Wi-Fi network. Guest networks often block devices from seeing each other.
-reviewed: '2026-10-23'
+reviewed: '2026-10-28'
 internal:
   sources: [RetroTV-releases page Remote & controllers, Built-in player and Phone link sections]
   verified: '2026-10-23'

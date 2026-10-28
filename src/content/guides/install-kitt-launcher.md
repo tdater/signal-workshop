@@ -5,7 +5,7 @@ summary: Pick the right edition for your head unit, install the APK and set it a
 published: true
 project: kitt-launcher
 topics: [Installation, Head units]
-appliesTo: KITT Launcher 1.8 and KITT Launcher.2 1.8 · Android 7.0+
+appliesTo: KITT Launcher and KITT Launcher.2 1.8–1.9 · Android 7.0+
 time: About 10 minutes
 prerequisites:
   - An Android head unit running Android 7.0 or newer.
@@ -24,7 +24,7 @@ steps:
       On the head unit, open this site's [downloads page](/downloads) and tap the download button
       for your edition. Or download it on a computer, check the SHA-256 (see [verify a
       download](/guides/verify-a-download)) and copy it over on a USB stick.
-    expect: A file named like `KITT-Launcher.2-v1.8.apk` is in Downloads or on the stick.
+    expect: A file named like `KITT-Launcher.2-v1.9.apk` is in Downloads or on the stick.
   - title: Open it and allow the install
     body: >-
       Open the file from the browser's downloads or a file manager. Android asks you to allow
@@ -65,7 +65,7 @@ troubleshooting:
       Android's.
   - symptom: Install is blocked with a message about the developer not being verified or registered
     fix: See [installing apps from this site](/guides/installing-android-apps) for what Android developer verification means for sideloaded apps.
-reviewed: '2026-10-23'
+reviewed: '2026-10-28'
 internal:
   sources: [KITT-Launcher-releases README and features page Install section]
   verified: '2026-10-23'

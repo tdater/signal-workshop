@@ -63,7 +63,8 @@ describe('releases', () => {
   it('have exactly one current release per project edition', () => {
     const keys = releases.filter((r) => r.current).map((r) => `${r.project}/${r.edition ?? ''}`);
     expect(new Set(keys).size).toBe(keys.length);
-    for (const p of published)
+    // A project with no release files shows an honest "no release yet" state instead.
+    for (const p of published.filter((x) => releases.some((r) => r.project === x.slug)))
       expect(
         keys.some((k) => k.startsWith(`${p.slug}/`)),
         p.slug,

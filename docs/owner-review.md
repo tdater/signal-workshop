@@ -20,11 +20,24 @@ Things only Travis can confirm. The site is built so each is a small text edit.
 6. **Microphone fix guide** (`src/content/guides/kitt-microphone-fix.md`) is a draft
    (`published: false`) because the fix steps weren't verifiable from published material.
    Confirm or delete.
+7. **AIOS page (added 2026-10-28)** (`src/content/projects/aios.yaml`). `tdater/aios` is public
+   and MIT-licensed, but it's the source repo, so the site doesn't link it, and its releases are
+   debug-signed APKs attached to that repo, so the site offers no download. Is AIOS OK to show
+   publicly at all? If you want a download, publish a release-signed APK in a separate public
+   release repo (like the other apps) and add a release file. The screenshots are the repo's own
+   sample-data renders of interface v0.2.0; newer captures would be better.
+8. **"Holo" KITT launchers.** I read this as the film editions (Hill Valley 2015 shows HOLO and
+   uses the holographic café host character). If you meant something separate, it isn't in any
+   GitHub repo this session could see.
+9. **About and home copy** got small additions for AIOS ("plus an AI workspace for the PC", and
+   the "Where it's heading" paragraph). Check they sound like you.
 
 ## Media wanted (optional)
 
 - Real RetroTV screenshots or a short silent clip (TV capture, no personal accounts visible).
 - Real BLACKBOX screenshots with demo data. The page currently says honestly that there are none.
+  (BLACKBOX had no new releases or commits as of 2026-10-28.)
+- AIOS captures of the newer screens (life missions, ambient display, computer check results).
 - KITT screenshots on the site are your published emulator demo-mode captures and are labelled
   that way. Real head-unit photos would be better if you have them.
 

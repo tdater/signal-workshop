@@ -12,9 +12,9 @@ prerequisites:
 steps:
   - title: Compute the checksum
     body: >-
-      **Windows (PowerShell):** `Get-FileHash .\RetroTV-v1.2.apk -Algorithm SHA256`.
-      **macOS:** `shasum -a 256 RetroTV-v1.2.apk`.
-      **Linux:** `sha256sum RetroTV-v1.2.apk`.
+      **Windows (PowerShell):** `Get-FileHash .\RetroTV-v1.4.apk -Algorithm SHA256`.
+      **macOS:** `shasum -a 256 RetroTV-v1.4.apk`.
+      **Linux:** `sha256sum RetroTV-v1.4.apk`.
     expect: A 64-character hexadecimal string.
   - title: Compare it
     body: Compare it with the SHA-256 on the download card. Every character must match. Upper or lower case doesn't matter.
@@ -24,7 +24,7 @@ verify: If the values differ, delete the file and download it again directly fro
 troubleshooting:
   - symptom: The checksum doesn't match
     fix: Re-download. A truncated download is the usual cause. If it still doesn't match, don't install it, and report it through the feedback form as a private report.
-reviewed: '2026-10-23'
+reviewed: '2026-10-28'
 internal:
   sources: ['Project brief: a checksum is a consistency check, not a malware verdict']
   verified: '2026-10-23'

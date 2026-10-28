@@ -1,23 +1,26 @@
 # Requirement-to-test checklist
 
-Status on 2026-10-23. Test evidence: `npm test` (unit + integration, 72 passing) and
-`npm run test:e2e` (Playwright on Chromium, 45 passing), `npm run check` (0 errors),
-`npm run lint` (clean), `npm run build` (postbuild privacy/link/CSP checks pass),
-`npm run verify:downloads` (5/5 match), `npm audit` (0 vulnerabilities). Unit = `tests/unit`,
+Status on 2026-10-28 (project survey update: AIOS added, KITT Launcher 1.9, RetroTV 1.4). Test
+evidence: `npm test` (unit + integration, 72 passing) and `npm run test:e2e` (Playwright on
+Chromium, 49 passing), `npm run check` (0 errors), `npm run lint` (clean), `npm run build`
+(postbuild privacy/link/CSP checks pass), `npm run verify:downloads -- --all` (19/19 match),
+`npm audit` (0 vulnerabilities, last run 2026-10-23). Unit = `tests/unit`,
 Int = `tests/integration/api.test.ts`, E2E = `tests/e2e`.
 
 Legend: ✅ built and tested · 🟡 built, partly verified · ⛔ blocked on owner · ➖ not applicable
 
 ## Information architecture and journeys
 
-| Requirement                                                                                                                                        | Where                                             | Evidence                                                                                                        | Status                                                                  |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Routes: /, /projects, /projects/{slug}, /guides, /guides/{slug}, /faq, /about, /downloads, /feedback, /privacy, /community-guidelines, /admin, 404 | `src/pages/`                                      | E2E "every public area is reachable from navigation and reloads directly", "unknown project gives a useful 404" | ✅                                                                      |
-| Find a project by problem without knowing repo names                                                                                               | ProjectFinder, /projects filters, /search         | E2E finder, library filters + empty state, workshop search + no results                                         | ✅                                                                      |
-| Project pages: purpose, motivation, functionality, integrations, compatibility, limitations, install                                               | `projects/[slug].astro`, project YAML             | Schema requires the fields; axe + journeys load each page                                                       | ✅                                                                      |
-| Distinguish released / development / experimental / unavailable                                                                                    | `state`, `channel`, `availability` fields; badges | Unit release tests; E2E passport; BLACKBOX shows "Early release"                                                | ✅ (no unavailable release exists today; the state renders from schema) |
-| Guides with prerequisites, steps, expected result, verify, troubleshooting                                                                         | `guides/[slug].astro`                             | axe on a guide; links checked at build                                                                          | ✅                                                                      |
-| FAQ search, filter, deep links                                                                                                                     | `faq.astro`                                       | E2E "FAQ search, filter and deep links work"                                                                    | ✅                                                                      |
+| Requirement                                                                                                                                        | Where                                             | Evidence                                                                                                          | Status                                                                  |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Routes: /, /projects, /projects/{slug}, /guides, /guides/{slug}, /faq, /about, /downloads, /feedback, /privacy, /community-guidelines, /admin, 404 | `src/pages/`                                      | E2E "every public area is reachable from navigation and reloads directly", "unknown project gives a useful 404"   | ✅                                                                      |
+| Find a project by problem without knowing repo names                                                                                               | ProjectFinder, /projects filters, /search         | E2E finder, library filters + empty state, workshop search + no results                                           | ✅                                                                      |
+| Project pages: purpose, motivation, functionality, integrations, compatibility, limitations, install                                               | `projects/[slug].astro`, project YAML             | Schema requires the fields; axe + journeys load each page                                                         | ✅                                                                      |
+| Distinguish released / development / experimental / unavailable                                                                                    | `state`, `channel`, `availability` fields; badges | Unit release tests; E2E passport; BLACKBOX shows "Early release"                                                  | ✅ (no unavailable release exists today; the state renders from schema) |
+| Guides with prerequisites, steps, expected result, verify, troubleshooting                                                                         | `guides/[slug].astro`                             | axe on a guide; links checked at build                                                                            | ✅                                                                      |
+| FAQ search, filter, deep links                                                                                                                     | `faq.astro`                                       | E2E "FAQ search, filter and deep links work"                                                                      | ✅                                                                      |
+| Project with no approved release shows an honest state, no dead download (AIOS)                                                                    | `projects/[slug].astro` `#no-release`, downloads  | E2E "AIOS shows real media and an honest no-release state, never a source link"; axe + overflow on /projects/aios | ✅                                                                      |
+| New releases and media from the 2026-10-28 survey (KITT 1.9 ×2, RetroTV 1.3/1.4, film editions, music library)                                     | `src/content/releases/`, `kitt-launcher.yaml`     | E2E "KITT Launcher shows the 1.9 releases…"; passport test on RetroTV 1.4; verify:downloads                       | ✅                                                                      |
 
 ## Distinctive features (brief asks for 3+)
 
@@ -51,22 +54,23 @@ Legend: ✅ built and tested · 🟡 built, partly verified · ⛔ blocked on ow
 
 ## Privacy and security
 
-| Requirement                                                                | Evidence                                                                         | Status                                                 |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| No private data, drafts, internal metadata, secrets, source maps in output | `scripts/postbuild-check.mjs` on every build                                     | ✅                                                     |
-| CSP tested with the real site                                              | Hash-based CSP in `_headers`; E2E no console errors/CSP violations; headers test | ✅ (local `wrangler pages dev`; not yet on Cloudflare) |
-| Public pages indexable, admin/API noindex                                  | E2E headers test                                                                 | ✅                                                     |
-| No trackers or third-party requests                                        | Self-hosted fonts; CSP `default-src 'self'` would block others                   | ✅                                                     |
+| Requirement                                                                 | Evidence                                                                         | Status                                                 |
+| --------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| No private data, drafts, internal metadata, secrets, source maps in output  | `scripts/postbuild-check.mjs` on every build                                     | ✅                                                     |
+| Source repos never linked (incl. `tdater/aios`); debug builds never offered | postbuild forbidden list; E2E AIOS page has no source link and no `.apk` link    | ✅                                                     |
+| CSP tested with the real site                                               | Hash-based CSP in `_headers`; E2E no console errors/CSP violations; headers test | ✅ (local `wrangler pages dev`; not yet on Cloudflare) |
+| Public pages indexable, admin/API noindex                                   | E2E headers test                                                                 | ✅                                                     |
+| No trackers or third-party requests                                         | Self-hosted fonts; CSP `default-src 'self'` would block others                   | ✅                                                     |
 
 ## Accessibility, responsive, performance
 
 | Requirement                                             | Evidence                                                                                  | Status                                          |
 | ------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| WCAG 2.2 AA automated checks                            | axe on 15 pages, 0 violations                                                             | ✅ automated only; no manual screen-reader pass |
+| WCAG 2.2 AA automated checks                            | axe on 16 pages, 0 violations                                                             | ✅ automated only; no manual screen-reader pass |
 | 360, 390, 768, 1024, 1440, 1920 px, 200% zoom           | E2E overflow at each width + 640 px zoom equivalent; screenshots reviewed at 360 and 1440 | ✅                                              |
 | Keyboard, focus, skip link, lightbox focus trap, Escape | E2E keyboard, lightbox, mobile menu                                                       | ✅                                              |
 | Touch targets ≈ 44 px                                   | E2E on key controls (Pixel 7 emulation)                                                   | ✅ emulated, not a real device                  |
-| Reduced motion                                          | E2E scanner animation stops                                                               | ✅                                              |
+| Reduced motion                                          | E2E scanner animation stops; AIOS orbit motif stops under `prefers-reduced-motion` (CSS)  | ✅ (orbit: CSS only, not E2E-tested)            |
 | Works without JavaScript                                | E2E core content without JS                                                               | ✅                                              |
 | Core Web Vitals targets                                 | Lighthouse lab: LCP 1.1–2.2 s, CLS ≤ 0.049, TBT 0 ms                                      | 🟡 lab only; no field data                      |
 

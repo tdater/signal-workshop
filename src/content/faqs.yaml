@@ -91,11 +91,12 @@
   answer: >-
     Open the quick menu (hold OK or press Menu) and choose "Game not working? Fix it". It steps
     through player choice, desktop or mobile view, ad blocking and controller mode, and remembers
-    what worked for that site. Also make sure Android System WebView is up to date.
+    what worked for that site. Also make sure Android System WebView is up to date. If a game
+    runs but stutters on a slower TV box, v1.4 offers smooth mode through a "Choppy?" prompt.
   projects: [retrotv]
   topics: [Troubleshooting]
   links: [{ label: Install guide, href: /guides/install-retrotv }]
-  reviewed: '2026-10-23'
+  reviewed: '2026-10-28'
   published: true
 - id: retrotv-fire-tv
   question: Does RetroTV work on Fire TV?
@@ -166,4 +167,55 @@
   topics: [Feedback, Privacy]
   links: [{ label: Privacy, href: /privacy }]
   reviewed: '2026-10-23'
+  published: true
+- id: kitt-film-editions
+  question: What are KITT Launcher's film editions, like the "Holo" one?
+  answer: >-
+    The four film HUD themes (Terminator, RoboCop, The Matrix and Back to the Future) each come
+    in three editions, twelve in all. Every edition has its own colours, scanner and readouts,
+    and KITT gets an original character voice to match. Hill Valley 2015, for example, shows HOLO
+    in the side rail and turns KITT into a cheesy holographic café host. The characters never
+    recite lines from the films. Pick one under KITT Config → Display & navigation. Both editions have them
+    since KITT Launcher v1.7 and KITT Launcher.2 v1.5.
+  projects: [kitt-launcher]
+  topics: [Themes]
+  links: [{ label: KITT Launcher downloads, href: /downloads }]
+  reviewed: '2026-10-28'
+  published: true
+- id: kitt-radio-screen-takeover
+  question: The head unit's radio screen keeps covering KITT when music starts. What can I do?
+  answer: >-
+    Some head units throw their stock radio screen over whatever is showing when an app starts
+    audio or opens the microphone. Since v1.9, if that happens within a few seconds of KITT
+    speaking, listening or starting music, KITT brings itself back. Opening an app yourself is
+    never undone. If you'd rather it didn't, turn it off under KITT Config → Microphone fix.
+  projects: [kitt-launcher]
+  topics: [Troubleshooting, Media]
+  links: [{ label: Install or update KITT Launcher, href: /guides/install-kitt-launcher }]
+  reviewed: '2026-10-28'
+  published: true
+- id: aios-download
+  question: Can I download AIOS?
+  answer: >-
+    Not from this site yet. AIOS is an early personal project, and the only Android builds so far
+    are debug-signed test builds rather than releases. When there's a real release, it will show
+    up on the downloads page with its size, checksum and QR code like every other app here.
+  projects: [aios]
+  topics: [Installation]
+  links: [{ label: Downloads, href: /downloads }]
+  reviewed: '2026-10-28'
+  published: true
+- id: aios-privacy
+  question: Does AIOS send my notes and memories to the cloud?
+  answer: >-
+    AIOS keeps its database, memory vault and backups on your own computer, and its server only
+    listens on that computer. Claude runs through the official Claude Code CLI with your own
+    sign-in, so what you ask Claude goes to Claude under your plan. Each AI's orbit decides how
+    much of your memory it may be told, and nothing marked secret is shared. Gemini and Perplexity
+    only get what you copy to them yourself. Voice is opt-in and uses the browser's own speech
+    service.
+  projects: [aios]
+  topics: [Privacy, AI]
+  links: [{ label: Feedback and ideas, href: /feedback }]
+  reviewed: '2026-10-28'
   published: true

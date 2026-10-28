@@ -1,0 +1,30 @@
+project: kitt-launcher
+edition: kitt2
+version: '1.9'
+channel: release
+date: '2026-10-23'
+current: true
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/KITT-Launcher.2-releases/releases/download/v1.9/KITT-Launcher.2-v1.9.apk
+  filename: KITT-Launcher.2-v1.9.apk
+  type: Android APK
+  bytes: 34667410
+  sha256: af3fd70372ce70eaff759ee7b455a7877cdf6de4d3bcea7785bcc387c914eedf
+  checksumSource: GitHub release asset digest, matched by downloading the file anonymously on 2026-10-28
+minimum: Android 7.0+ head unit, 7–10" landscape
+platforms:
+  - Android head unit
+notes:
+  - Music library on the Media page. Browse and search the music apps on the head unit that share their library (Spotify, YouTube Music, USB players and others) and tap to play without opening the app.
+  - Recently played. The last songs, playlists and searches you started from KITT come back at the top of the Library.
+  - Play by voice, for example "Hey KITT, play Nightcall on Spotify". Leave out the app and KITT uses the one playing now or the one you used last.
+  - Back from the radio screen. If a head unit throws its stock radio screen over the launcher within a few seconds of KITT speaking, listening or starting music, KITT brings itself back. Turn it off under KITT Config → Microphone fix.
+  - A freeze watchdog restarts stuck web pages on the AI page, and low-fuel and charging alerts are calmer.
+releasePage: https://github.com/tdater/KITT-Launcher.2-releases/releases/tag/v1.9
+internal:
+  sources:
+    - 'GitHub releases API: tdater/KITT-Launcher.2-releases v1.9'
+  verified: '2026-10-28'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

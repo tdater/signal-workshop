@@ -53,6 +53,7 @@ const forbidden = new Set([
   'github.com/tdater/RetroTV"',
   'github.com/tdater/RetroTV/',
   'tdater-BLACKBOX',
+  'github.com/tdater/aios',
   'KnightRiderLauncher',
   'pbkdf2-sha256$',
   'ADMIN_PASSWORD_HASH=',

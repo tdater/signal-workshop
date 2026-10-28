@@ -1,9 +1,9 @@
 project: kitt-launcher
 edition: kitt2
 version: '1.8'
-channel: release
+channel: archived
 date: '2026-10-19'
-current: true
+current: false
 availability: available
 publicationApproved: true
 artifact:

@@ -37,7 +37,7 @@ const toc = [
   ['capabilities', 'What it does'],
   ['media', 'Screens'],
   ['requirements', 'Requirements'],
-  ['setup', 'Setup trail'],
+  ...(p.setupTrail.length ? [['setup', 'Setup trail']] : []),
   ['limits', 'Limitations'],
   ['download', 'Download'],
   ['help', 'Guides & FAQ'],
@@ -229,10 +229,12 @@ const toc = [
         </p>
       </section>
 
-      <section id="setup" class="psec">
-        <h2>Guided setup trail</h2>
-        <SetupTrail project={p} />
-      </section>
+      {p.setupTrail.length > 0 && (
+        <section id="setup" class="psec">
+          <h2>Guided setup trail</h2>
+          <SetupTrail project={p} />
+        </section>
+      )}
 
       <section id="limits" class="psec">
         <h2>Limitations and known issues</h2>
@@ -246,11 +248,21 @@ const toc = [
 
       <section id="download" class="psec">
         <h2>Download</h2>
-        <div class="passports">
-          {current.map((r) => (
-            <DownloadPassport release={r} project={p} installGuide={installGuide} />
-          ))}
-        </div>
+        {current.length ? (
+          <div class="passports">
+            {current.map((r) => (
+              <DownloadPassport release={r} project={p} installGuide={installGuide} />
+            ))}
+          </div>
+        ) : (
+          <div class="panel" id="no-release">
+            <p class="eyebrow">No release yet</p>
+            <p>
+              There's no approved public download for {p.title} yet, so this page doesn't offer one.
+              It will appear here, with its checksum and QR code, once a release is published.
+            </p>
+          </div>
+        )}
         {previous.length > 0 && (
           <details class="prev">
             <summary>Previous versions ({previous.length})</summary>

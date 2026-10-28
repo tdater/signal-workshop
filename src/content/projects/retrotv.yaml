@@ -4,7 +4,7 @@ tagline: Retro games on an Android TV without setting up emulators. It's a TV br
 published: true
 order: 2
 state: released
-stateNote: Version 1.2. Shared as-is by one person, so no warranty and no support contract.
+stateNote: Version 1.4. Shared as-is by one person, so no warranty and no support contract.
 accent: '#ff4fd8'
 motif: crt
 icon:
@@ -29,8 +29,9 @@ problem: >-
 why: >-
   Many game sites run their games in EmulatorJS, and their pages often stall waiting on ads. Each
   release since v1.0 has tackled one of those frustrations: a built-in player in v1.1 that keeps
-  the site as the catalogue and runs the game cleanly, then a library, phone link and save sync in
-  v1.2.
+  the site as the catalogue and runs the game cleanly, a library, phone link and save sync in
+  v1.2, a one-button fix for games that won't start in v1.3, and smooth mode for slow TV boxes
+  in v1.4.
 story:
   - date: '2026-10-19'
     title: v1.0, a TV browser for game sites
@@ -52,6 +53,22 @@ story:
       save sync between two TVs, rewind, filters, cheats and attract mode. Each phase was planned
       and tested first (the release notes list each red test before its fix).
     evidence: v1.2 release notes
+  - date: '2026-10-23'
+    title: 'v1.3, "Game not working? Fix it"'
+    body: >-
+      One button tries the usual fixes in turn and remembers what worked for that game. The
+      built-in player now rejects web pages that were saved as if they were games, recovers from
+      a failed start and falls back to the site's own player. The home screen gained a Continue
+      playing card, Surprise me, play stats and site status chips.
+    evidence: v1.3 release notes and "What's new" on the published features page
+  - date: '2026-10-23'
+    title: v1.4, smooth on slow TV boxes
+    body: >-
+      Smooth mode and a "Choppy?" prompt for slower boxes, checks before a game starts, and
+      download progress. Downloaded ROMs now play inside RetroTV instead of handing off to other
+      apps. Collections, reorderable home rows, per-console button layouts, auto-resume and a
+      co-op "Who's playing?" screen arrived in the same release.
+    evidence: v1.4 release notes and "What's new" on the published features page
 capabilities:
   - group: Remote and controllers
     items:
@@ -70,9 +87,17 @@ capabilities:
       - Blocks ad servers, pop-under networks and redirects, but never game files or emulator code.
       - Blocking can be turned off per site, and blocked pop-ups wait in the menu.
       - Install any built-in site as its own TV app tile with sandboxed sign-ins.
+  - group: When a game misbehaves (v1.3 and v1.4)
+    items:
+      - '"Game not working? Fix it" tries the usual fixes one after another and remembers what worked for that game.'
+      - A start watchdog notices a game that never starts and falls back to the site's own player.
+      - Smooth mode for slow TV boxes, with a "Choppy?" prompt when a game stutters.
+      - A preflight check before a game starts, with download progress and controls help.
   - group: Library and phone link
     items:
-      - My games library with box art, play time and favourites.
+      - My games library with box art, play time and favourites, plus collections and home rows you can reorder (v1.4).
+      - Continue playing, Surprise me and play stats on the home screen (v1.3). Auto-resume picks up where you left off (v1.4).
+      - Per-console controller layouts and a co-op "Who's playing?" screen (v1.4).
       - Scan a QR code on the TV and a phone on the same Wi-Fi becomes a controller. No app needed.
       - Send ROMs from the phone, back up to the phone, and sync saves between two RetroTVs.
 integrations:
@@ -218,5 +243,5 @@ internal:
     - RetroTV-releases README and features page, commit 61bdadd
     - RetroTV README and AndroidManifest.xml
     - GitHub releases API
-  verified: '2026-10-23'
+  verified: '2026-10-28'
   notes: No app UI screenshots exist in the published page. Ask Travis for real TV captures.

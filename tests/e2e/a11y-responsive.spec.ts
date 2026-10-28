@@ -6,6 +6,7 @@ const pages = [
   '/projects',
   '/projects/kitt-launcher',
   '/projects/blackbox',
+  '/projects/aios',
   '/guides',
   '/guides/connect-obd-adapter',
   '/faq',
@@ -36,6 +37,7 @@ const widths = [360, 390, 768, 1024, 1440, 1920];
 const layoutPages = [
   '/',
   '/projects/kitt-launcher',
+  '/projects/aios',
   '/downloads',
   '/feedback',
   '/faq',

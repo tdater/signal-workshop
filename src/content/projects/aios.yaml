@@ -1,0 +1,210 @@
+slug: aios
+title: AIOS
+tagline: Your AI as a universe you can fly through. A local-first 3D workspace for Claude, your memories, projects, daily widgets and PC health.
+published: true
+order: 4
+state: active-development
+stateNote: >-
+  Version 0.6.0, an early personal project built for one user on Windows 11. Only debug-signed
+  Android test builds exist so far, so there's no download here yet.
+accent: '#5aa9ff'
+motif: orbit
+icon:
+  src: /media/icons/aios.webp
+  alt: AIOS app icon, a green dot inside a blue ring
+category: [AI, Productivity]
+platforms: [Windows 11, Android phone]
+tags: [ai, local-first, windows, notes, handoff, testing, voice]
+summary: >-
+  AIOS puts every AI you use, everything it remembers, your projects and your computer's health
+  into one interactive 3D space that runs on your own PC. You're the sun. Your AIs are planets,
+  and the closer a planet orbits, the more of your memories it may be told. Memories are stars,
+  projects are stations, daily widgets are probes and anything waiting for your approval is a
+  comet. Prefer text? List view shows the whole universe as a plain list, and calm mode turns the
+  motion off.
+audience:
+  - People who use Claude Code and other AI tools daily and want one place for projects, memory and approvals.
+  - Anyone who'd rather see what their AI knows and is allowed to do than dig through settings pages.
+  - Windows users who want a plain-words health check of their PC that explains things and changes nothing.
+problem: >-
+  Most AI tools are a text box. What the AI remembers, which tool may see which notes, what's
+  running and what's waiting for a yes all live in different places, or nowhere you can see.
+  AIOS turns that into a place: every capability, setting, memory and project is an object with
+  a plain-words card, and nothing that matters happens without an approval tied to that exact
+  action.
+why: >-
+  It started on 24 October 2026 as one project workspace for working with official AI tools,
+  reviewing real changes and carrying knowledge into the next session. Two days later the
+  universe became the home screen. The design rule shows everywhere: safety is enforced in code
+  (path guards, approvals, limits and block lists), not by asking a model nicely, and anything
+  mocked or untested is labelled as such.
+story:
+  - date: '2026-10-24'
+    title: A workspace, not a chat box
+    body: >-
+      The first goal was a real one: talk to Claude Code about a project, let it change an
+      isolated copy, show the diff, run tests only after you approve that exact command, and have
+      an independent reviewer session check the result. AIOS, not a model, decides READY or NOT
+      READY.
+    evidence: Product goal and architecture notes in the project documentation
+  - date: '2026-10-26'
+    title: '0.3.0: the universe becomes the app'
+    body: >-
+      The home screen turned into a navigable 3D space with a flat fallback for software
+      graphics, plain-words cards for every object, My Day widgets, Home Base computer findings,
+      opt-in voice and a household vault. The Android client gained Android TV support.
+    evidence: 0.3.0 changelog entry
+  - date: '2026-10-27'
+    title: '0.4.0: simpler, in plain English'
+    body: >-
+      Simple mode cut the navigation to four anchors plus a Quick add menu. Approvals now open
+      with what AIOS wants to do in everyday words and how safe it is, with the exact action hash
+      tucked under "Technical details and proof".
+    evidence: 0.4.0 changelog entry
+  - date: '2026-10-28'
+    title: '0.5.0 and 0.6.0: everyday life, and a first reviewer scorecard'
+    body: >-
+      Life missions, an evening wrap-up and brain dump, a fuller read-only computer check, a
+      local scam second opinion, a decision matrix and an ambient display for a wall screen or
+      TV. The reviewer calibration range ran on real Claude for the first time. Its own notes call
+      the cases too easy to tell models apart: a smoke test, not a quality measurement.
+    evidence: 0.5.0 and 0.6.0 changelog entries
+capabilities:
+  - group: The universe
+    items:
+      - A 3D home screen you can drag, zoom and fly through, with a travel dock, Go to (Ctrl+G), a radar and a bookmarkable link for every object.
+      - Every object has a plain-words card with settings in three levels (Basics, More, Expert). Changes can be undone.
+      - List view shows everything as plain text, and calm mode turns the motion off. Without WebGL 2 it draws a flat version of the same universe.
+      - One red All Stop button stops AIOS from starting anything new.
+  - group: Working with AI
+    items:
+      - Ask is read-only. Make changes edits an isolated copy of a project, never your folder, and you see the diff.
+      - Tests run only after you approve that exact command, and an independent reviewer session checks the revision.
+      - Approvals are tied to one exact action, single use and expiring, and read in plain English.
+      - Gemini and Perplexity are copy-and-paste relays you trigger yourself. Claude runs through the official Claude Code CLI with your own sign-in.
+  - group: Memory
+    items:
+      - A Markdown vault is the source of truth, with a search index, a graph view, daily notes and a review queue for anything AIOS suggests remembering.
+      - Each AI's orbit sets how much of your memory it may be told. Nothing marked secret is ever shared.
+      - Knowledge cards with starter templates for appliances, vehicles, trips, bills and an emergency card.
+  - group: Your day
+    items:
+      - My Day widgets you pick from a catalog, like Top 3, water and habit trackers, a focus timer, shopping lists and stand-up notes.
+      - Morning briefing, evening wrap-up and weekly review routines that run at most once a day and never while All Stop is on.
+      - A brain dump that sorts what you say into to-dos, shopping and notes, and saves only what you accept.
+      - An ambient display for a wall screen or TV, with large type and remote-friendly keys.
+  - group: Your computer
+    items:
+      - Home Base checks memory, drives, the temp folder, start-up programs, uptime and battery, and explains each finding in plain words.
+      - It reads and never tidies behind your back. Registry, services, drivers, antivirus, deleting files and installing software are refused in code.
+      - The Rover can look at one window you choose and guide you with numbered steps, including "what does this popup mean?". It never clicks or types for you.
+      - A local scam second opinion says "looks like a scam" and never "safe".
+integrations:
+  - name: Claude Code CLI
+    note: The main assistant. Runs unmodified with your own Claude sign-in. AIOS never reads or stores your tokens or API keys.
+  - name: Gemini and Perplexity
+    note: Copy and paste only. You press the button, and nothing is sent in the background.
+  - name: Antigravity
+    note: A manual hand-off for big coding jobs.
+  - name: Tailscale
+    note: Optional, for reaching AIOS from your phone over your own private network with HTTPS.
+requirements:
+  - label: Computer
+    value: Windows 11. It was built and tested for one user on one PC.
+  - label: AI
+    value: The Claude Code CLI signed in with your own Claude plan. AIOS makes no paid API calls by default.
+  - label: Graphics
+    value: WebGL 2 for the 3D view. Without it you get the flat version.
+  - label: Phone (optional)
+    value: An Android 7.0+ phone running the companion app, connected to your PC over a private network such as Tailscale. The app is a client, so the PC does the work.
+  - label: Network
+    value: The server only listens on the PC itself. Don't expose it to the public internet.
+limitations:
+  - An early personal project with one author and one user. It has not had an external security review.
+  - No download is offered here. The only Android builds so far are debug-signed test builds, not releases.
+  - Path checks are application-level guards, not an operating-system sandbox.
+  - The Rover can't click, type or drive a browser. Those levels are specified but not built.
+  - Phone access over Tailscale and the newest screens on a phone or TV haven't been confirmed on real devices yet.
+  - Behaviour with real Claude is shown by demo scripts. The automatic tests use a stand-in.
+mediaNote: >-
+  These pictures are real renders of the AIOS interface, made by the project's own screenshot
+  script from invented sample data rather than anyone's real AIOS. They show version 0.2.0 of the
+  interface, so newer screens like life missions and the ambient display aren't pictured yet.
+media:
+  - kind: screenshot
+    src: /media/aios/universe.webp
+    thumb: /media/aios/universe-thumb.webp
+    width: 1440
+    height: 900
+    group: The universe
+    alt: The AIOS universe. A glowing sun in the centre with orbit rings, planets labelled Claude, Perplexity and Antigravity, region buttons on the left and status tiles and a ship's log on the right
+    caption: Home. You're the sun, your AIs are planets and the side panel shows what's running and what changed.
+    evidence: Rendered by the project's screenshot script from invented sample data (interface v0.2.0)
+  - kind: screenshot
+    src: /media/aios/planet-card.webp
+    thumb: /media/aios/planet-card-thumb.webp
+    width: 1440
+    height: 900
+    group: The universe
+    alt: Claude's planet card. Options for what Claude may be told, from everything to only public memories to nothing, with Basics, More and Expert tabs
+    caption: An AI's card. Its orbit decides how much of your memory it may be told.
+    evidence: Rendered by the project's screenshot script from invented sample data (interface v0.2.0)
+  - kind: screenshot
+    src: /media/aios/home-base.webp
+    thumb: /media/aios/home-base-thumb.webp
+    width: 1440
+    height: 900
+    group: The universe
+    alt: Home Base, a space station in an asteroid belt, with a card offering to check this computer now or once a week
+    caption: Home Base. Computer health as an asteroid belt of findings. The check reads and changes nothing.
+    evidence: Rendered by the project's screenshot script from invented sample data (interface v0.2.0)
+  - kind: screenshot
+    src: /media/aios/my-day.webp
+    thumb: /media/aios/my-day-thumb.webp
+    width: 1440
+    height: 900
+    group: My Day
+    alt: My Day panel over the universe with a Today's top 3 checklist, a glasses of water counter and a move for 20 minutes habit
+    caption: My Day. Small widgets you choose, stored on your own computer.
+    evidence: Rendered by the project's screenshot script from invented sample data (interface v0.2.0)
+  - kind: screenshot
+    src: /media/aios/widget-gallery.webp
+    thumb: /media/aios/widget-gallery-thumb.webp
+    width: 1440
+    height: 900
+    group: My Day
+    alt: The Add to My Day gallery with cards for Today's top 3, Morning briefing, Evening wrap-up, Weekly review, Quick capture and Gratitude note
+    caption: The widget gallery. Routines marked "Needs Claude" use your own Claude plan.
+    evidence: Rendered by the project's screenshot script from invented sample data (interface v0.2.0)
+  - kind: screenshot
+    src: /media/aios/list-view.webp
+    thumb: /media/aios/list-view-thumb.webp
+    width: 1440
+    height: 900
+    group: Without the 3D
+    alt: List view showing You, The Fleet and The Star Fields as plain text headings with one line per AI and skill
+    caption: List view. The whole universe as plain text, for when you'd rather read than fly.
+    evidence: Rendered by the project's screenshot script from invented sample data (interface v0.2.0)
+  - kind: screenshot
+    src: /media/aios/phone.webp
+    thumb: /media/aios/phone-thumb.webp
+    width: 780
+    height: 1688
+    group: Without the 3D
+    alt: The AIOS universe on a phone screen with region buttons below it and a bottom navigation bar
+    caption: The universe on a phone, with bottom navigation.
+    evidence: Rendered by the project's screenshot script from invented sample data (interface v0.2.0)
+support: >-
+  An early personal project with no support and no warranty. Respectful ideas and comments are
+  welcome through the feedback form.
+internal:
+  sources:
+    - aios repository README, CHANGELOG, docs/HANDOFF.md and docs/product-goal.md at commit 713dfd5
+    - GitHub releases API for the aios repository (debug-signed APKs only, v0.3.0 to v0.5.0)
+    - docs/assets screenshots, generated by apps/web/e2e/readme-shots.mjs from sample data
+  verified: '2026-10-28'
+  notes: >-
+    The aios repo is public source with MIT license, but it is the source repo, so the site never
+    links it. Its releases are debug-signed APKs attached to the source repo, so no download is
+    offered (brief forbids publishing debug builds or linking source). Ask Travis about a separate
+    public release repo and a release-signed APK.

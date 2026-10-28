@@ -5,7 +5,7 @@ summary: Add a Gemini or Perplexity API key, pick a personality, and know what w
 published: true
 project: kitt-launcher
 topics: [AI, API configuration]
-appliesTo: KITT Launcher / KITT Launcher.2 1.8
+appliesTo: KITT Launcher / KITT Launcher.2 1.8–1.9
 time: About 10 minutes
 prerequisites:
   - A Google Gemini API key or a Perplexity API key, created in that provider's developer console.
@@ -53,7 +53,7 @@ troubleshooting:
       the **Microphone fix** section in KITT Config explains how to stop it.
   - symptom: Gemini web search answers don't appear
     fix: Google Search grounding is optional, and KITT skips it automatically on free-tier keys.
-reviewed: '2026-10-23'
+reviewed: '2026-10-28'
 internal:
   sources: [features page KITT AI section, KITT-Launcher.2 README]
   verified: '2026-10-23'
