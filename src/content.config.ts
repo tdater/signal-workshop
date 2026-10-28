@@ -40,7 +40,7 @@ const projects = defineCollection({
     state: z.enum(['released', 'active-development', 'experimental', 'archived', 'planned']),
     stateNote: z.string(),
     accent: z.string().regex(/^#[0-9a-f]{6}$/i),
-    motif: z.enum(['scanner', 'crt', 'trace']),
+    motif: z.enum(['scanner', 'crt', 'trace', 'orbit']),
     icon: z.object({ src: z.string().startsWith('/media/'), alt: z.string() }).optional(),
     category: z.array(z.string()).min(1),
     platforms: z.array(z.string()).min(1),

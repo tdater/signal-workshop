@@ -5,7 +5,7 @@ summary: Sideload the RetroTV APK with the free Downloader app, on Google TV/And
 published: true
 project: retrotv
 topics: [Installation, TV]
-appliesTo: RetroTV 1.2 · Android 7.0+ TV devices
+appliesTo: RetroTV 1.2–1.4 · Android 7.0+ TV devices
 time: About 10 minutes
 prerequisites:
   - An Android TV, Google TV or Fire TV device running Android 7.0 or newer.
@@ -26,7 +26,7 @@ steps:
       In Downloader, type the download link from this site's [RetroTV downloads
       section](/downloads#retrotv). The QR code there lets you open the link on your phone and read
       it off easily. Typing URLs with a remote is everyone's least favourite hobby.
-    expect: Downloader downloads `RetroTV-v1.2.apk` and offers to install it.
+    expect: Downloader downloads `RetroTV-v1.4.apk` and offers to install it.
   - title: Install
     body: On Google TV/Android TV, allow Downloader to install unknown apps when asked. Then press **Install**.
     expect: RetroTV appears in your apps row (Your Apps on Fire TV).
@@ -42,7 +42,7 @@ troubleshooting:
       mode, and remembers what worked for that site.
   - symptom: Install is blocked with a message about the developer not being verified or registered
     fix: See [installing apps from this site](/guides/installing-android-apps).
-reviewed: '2026-10-23'
+reviewed: '2026-10-28'
 internal:
   sources: [RetroTV-releases README and page Install section]
   verified: '2026-10-23'

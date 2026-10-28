@@ -5,7 +5,7 @@ summary: Pair a Bluetooth Classic, BLE or Wi-Fi ELM327 adapter and get live gaug
 published: true
 project: kitt-launcher
 topics: [Bluetooth/BLE, OBD-II, Connectivity]
-appliesTo: KITT Launcher / KITT Launcher.2 1.8
+appliesTo: KITT Launcher / KITT Launcher.2 1.8–1.9
 time: 10 to 15 minutes, car parked
 prerequisites:
   - An ELM327-compatible OBD-II adapter (Bluetooth Classic, Bluetooth Low Energy, or Wi-Fi).
@@ -59,7 +59,7 @@ troubleshooting:
     fix: >-
       Use Report a problem in KITT Config. It includes the OBD connection log and your settings,
       with keys removed. Review the report before sharing it, and don't post your VIN publicly.
-reviewed: '2026-10-23'
+reviewed: '2026-10-28'
 internal:
   sources: [features page Car scanner section, v1.5 and v1.7 notes]
   verified: '2026-10-23'

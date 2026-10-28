@@ -4,7 +4,7 @@ tagline: A Knight Rider home screen for Android car head units, with an OBD-II s
 published: true
 order: 1
 state: released
-stateNote: Version 1.8 for both editions. Shared as-is by one person, so no warranty and no support contract.
+stateNote: Version 1.9 for both editions. Shared as-is by one person, so no warranty and no support contract.
 accent: '#ff4b3e'
 motif: scanner
 icon:
@@ -63,13 +63,36 @@ story:
       both at once. The original repository was retired at v1.7. v1.8 also added offline "Hey
       KITT", offline speech input and answers that work with no signal.
     evidence: v1.8 release notes; the retired repository's README
+  - date: '2026-10-19'
+    title: Film editions, three per film theme
+    body: >-
+      The four film HUD themes (Terminator, RoboCop, The Matrix and Back to the Future) each
+      split into three editions with their own colours, scanner, readouts and a character who
+      talks in their own words, like the Liquid Metal T-1000 or the Hill Valley 2015 "Holo Host".
+      Shipped in KITT Launcher v1.7 and KITT Launcher.2 v1.5.
+    evidence: Film editions section and v1.7 notes on the published features page
+  - date: '2026-10-23'
+    title: 'v1.9: music without leaving the dash'
+    body: >-
+      A Library tab on the Media page browses and searches the music apps on the head unit,
+      recently played comes back in one tap, and "Hey KITT, play Nightcall on Spotify" works by
+      voice. Some head units throw their stock radio screen over the launcher when audio starts,
+      so KITT now brings itself back when that happens right after it spoke or started music.
+    evidence: v1.9 release notes and the "Next update" section of the published features page
 capabilities:
   - group: Home screen
     items:
       - Live OpenStreetMap map with place search, route preview and spoken turn-by-turn directions. No account needed.
       - Pages for Drive, Gauges, Media, AI, Games, Widgets and Apps. Swiping from the screen edge always changes page.
       - Optional driving layout with bigger media and volume buttons and your top three apps while the car is moving.
-      - Eleven themes, including film HUD themes with three editions each, plus night mode and a custom accent colour.
+      - Eleven themes plus night mode and a custom accent colour. The four film HUD themes come in three editions each (twelve in all), every one with its own colours, scanner and character.
+  - group: Music library (v1.9)
+    items:
+      - A Library tab on the Media page lists the music apps on the head unit that share their library, such as Spotify, YouTube Music and USB players. Search one, or browse its playlists, artists and albums, and tap to play without opening the app.
+      - Apps that don't share their library show a message and an Open button instead.
+      - Recently played songs, playlists and searches come back at the top of the Library.
+      - '"Hey KITT, play Nightcall on Spotify" searches that app''s library and plays the result. Leave out the app and KITT uses the one playing now or the one you used last.'
+      - If the head unit's stock radio screen takes over within a few seconds of KITT speaking, listening or starting music, KITT brings itself back. Opening an app yourself is never undone.
   - group: OBD-II car scanner
     items:
       - Works with ELM327-compatible adapters over Bluetooth Classic, Bluetooth Low Energy or Wi-Fi.
@@ -167,6 +190,158 @@ media:
     evidence: Recorded on a portrait head-unit emulator in demo mode
   - {
       kind: screenshot,
+      src: /media/kitt-launcher/library.webp,
+      thumb: /media/kitt-launcher/library-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'New in 1.9: music library',
+      alt: 'KITT Launcher Media page on the Library tab: a search box, recently played tiles and a list of playlists and artists from a demo music app',
+      caption: 'KITT Launcher (portrait): the Library tab with recently played on top. The music app is the built-in demo.',
+      evidence: Portrait head-unit emulator in demo mode with the app's demo music source,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-library.webp,
+      thumb: /media/kitt-launcher/l2-library-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'New in 1.9: music library',
+      alt: 'KITT Launcher.2 Media page on the Library tab with playlists, artists and recently played from a demo music app',
+      caption: 'KITT Launcher.2 (landscape): the same Library on a 7-inch screen.',
+      evidence: 1024×600 head-unit emulator in demo mode with the app's demo music source,
+    }
+  - kind: video
+    src: /media/kitt-launcher/l2-editions.mp4
+    poster: /media/kitt-launcher/l2-editions-poster.webp
+    width: 1024
+    height: 600
+    alt: Silent screen recording of KITT Launcher.2 switching between its film editions
+    caption: KITT Launcher.2 cycling through the film editions, each with its own colours, scanner and readouts. Silent 10-second clip with no narration.
+    group: Film editions
+    evidence: Recorded on a 1024×600 head-unit emulator in demo mode
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-t800.webp,
+      thumb: /media/kitt-launcher/l2-edition-t800-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'T-800 Vision edition: red vision overlay with scrolling machine code over the Drive page',
+      caption: 'Terminator, T-800 Vision edition: red vision and machine code',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-t1000.webp,
+      thumb: /media/kitt-launcher/l2-edition-t1000-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'Liquid Metal edition: grey chrome panels, a T-1000 badge and a "mimic" box around the map arrow',
+      caption: 'Terminator, Liquid Metal edition: mercury chrome panels',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-visor.webp,
+      thumb: /media/kitt-launcher/l2-edition-visor-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'RoboCop Visor edition: cold blue panels and a targeting reticle on the map arrow',
+      caption: 'RoboCop, Visor edition: cold blue glow and a reticle on the vehicle',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-ed209.webp,
+      thumb: /media/kitt-launcher/l2-edition-ed209-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'ED-209 edition: gunmetal panels with yellow and black hazard stripes',
+      caption: 'RoboCop, ED-209 edition: gunmetal and hazard stripes',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-deltacity.webp,
+      thumb: /media/kitt-launcher/l2-edition-deltacity-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'Delta City edition: navy panels with gold trim',
+      caption: 'RoboCop, OCP Delta City edition: navy and executive gold',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-code.webp,
+      thumb: /media/kitt-launcher/l2-edition-code-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'Digital Rain edition: green phosphor terminal panels',
+      caption: 'The Matrix, Digital Rain edition: green phosphor terminal',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-realworld.webp,
+      thumb: /media/kitt-launcher/l2-edition-realworld-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'Real World edition: cold blue-grey panels',
+      caption: "The Matrix, Real World edition: the hovercraft's cold blue",
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-zion.webp,
+      thumb: /media/kitt-launcher/l2-edition-zion-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'Zion edition: amber panels like firelight',
+      caption: 'The Matrix, Zion edition: amber firelight',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-delorean1985.webp,
+      thumb: /media/kitt-launcher/l2-edition-delorean1985-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'DeLorean 1985 edition: brushed steel panels and time-circuit date displays',
+      caption: 'Back to the Future, DeLorean 1985 edition: brushed steel and time circuits',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-hillvalley2015.webp,
+      thumb: /media/kitt-launcher/l2-edition-hillvalley2015-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'Hill Valley 2015 edition: magenta and cyan neon panels with HOLO in the side rail',
+      caption: 'Back to the Future, Hill Valley 2015 edition: hover-conversion neon and the "Holo Host" character',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-edition-frontier1885.webp,
+      thumb: /media/kitt-launcher/l2-edition-frontier1885-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: Film editions,
+      alt: 'Hill Valley 1885 edition: brass and sepia panels',
+      caption: 'Back to the Future, Hill Valley 1885 edition: brass, sepia and steam',
+      evidence: KITT Launcher.2 on a 1024×600 head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
       src: /media/kitt-launcher/l2-drive.webp,
       thumb: /media/kitt-launcher/l2-drive-thumb.webp,
       width: 1024,
@@ -246,6 +421,17 @@ media:
       group: 'KITT Launcher.2 · 7" landscape',
       alt: 'The Matrix film theme with green terminal panels over digital rain',
       caption: The Matrix theme,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/l2-ai.webp,
+      thumb: /media/kitt-launcher/l2-ai-thumb.webp,
+      width: 1024,
+      height: 600,
+      group: 'KITT Launcher.2 · 7" landscape',
+      alt: 'KITT Launcher.2 AI page with an ask-every-open-AI box and buttons to open Gemini, Claude, Perplexity and ChatGPT as tabs',
+      caption: 'AI page: your own Gemini, Claude, Perplexity and ChatGPT accounts in tabs, with one box to ask them all',
+      evidence: 1024×600 head-unit emulator in demo mode,
     }
   - {
       kind: screenshot,
@@ -370,6 +556,39 @@ media:
       alt: 'Drive page in the Back to the Future theme with time circuits',
       caption: Back to the Future theme,
     }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/stream.webp,
+      thumb: /media/kitt-launcher/stream-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Stream window with tiles for free movie, TV and music services above the vehicle status panel',
+      caption: 'Stream window: free movie, TV and music services in tiles, with favourites and continue watching',
+      evidence: Portrait head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/games.webp,
+      thumb: /media/kitt-launcher/games-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Games page with retro game site tiles and favourites',
+      caption: 'Games page: browser games with controller support, in the shared browser',
+      evidence: Portrait head-unit emulator in demo mode,
+    }
+  - {
+      kind: screenshot,
+      src: /media/kitt-launcher/quick-settings.webp,
+      thumb: /media/kitt-launcher/quick-settings-thumb.webp,
+      width: 800,
+      height: 1151,
+      group: 'KITT Launcher · portrait',
+      alt: 'Quick settings panel pulled down from the status strip with volume and brightness sliders',
+      caption: 'Quick settings: volume, brightness, night mode and shortcuts from the status strip',
+      evidence: Portrait head-unit emulator in demo mode,
+    }
 setupTrail:
   - {
       id: pick-edition,
@@ -422,8 +641,8 @@ support: >-
   release.
 internal:
   sources:
-    - KITT-Launcher-releases README and features page (index.html), commit 0ac768d
+    - KITT-Launcher-releases README and features page (index.html), commit 23b2d1b
     - KITT-Launcher.2 README, FEATURES.md, AndroidManifest.xml
     - GitHub releases API for both release repositories
-  verified: '2026-10-23'
+  verified: '2026-10-28'
   notes: Source repos are public on GitHub but the READMEs say source is not published, so the site never links them.

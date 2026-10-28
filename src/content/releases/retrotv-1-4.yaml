@@ -1,0 +1,30 @@
+project: retrotv
+version: '1.4'
+channel: release
+date: '2026-10-23'
+current: true
+availability: available
+publicationApproved: true
+artifact:
+  url: https://github.com/tdater/RetroTV-releases/releases/download/v1.4/RetroTV-v1.4.apk
+  filename: RetroTV-v1.4.apk
+  type: Android APK
+  bytes: 9212325
+  sha256: 8c8566d4218d8e9a3d42999bf61030009edd136779e529b4933f9ffb50732513
+  checksumSource: GitHub release asset digest, matched by downloading the file anonymously on 2026-10-28
+minimum: Android 7.0+ (Android TV, Google TV, Fire TV)
+platforms:
+  - Android TV
+  - Google TV
+  - Fire TV
+notes:
+  - Smooth mode and a "Choppy?" prompt for slower TV boxes, plus checks before a game starts and download progress.
+  - Downloaded ROMs play inside RetroTV instead of opening other apps.
+  - Collections, reorderable home rows, per-console button layouts and auto-resume.
+  - A co-op "Who's playing?" screen, site notes, core preloading on Wi-Fi and a cap on the box-art cache.
+releasePage: https://github.com/tdater/RetroTV-releases/releases/tag/v1.4
+internal:
+  sources:
+    - 'GitHub releases API: tdater/RetroTV-releases v1.4'
+  verified: '2026-10-28'
+  notes: 'publicationApproved: owner already published this APK as a public GitHub release.'

@@ -1,8 +1,8 @@
 project: retrotv
 version: '1.2'
-channel: release
+channel: archived
 date: '2026-10-19'
-current: true
+current: false
 availability: available
 publicationApproved: true
 artifact:

@@ -8,7 +8,7 @@ order: 4 # position in lists, lowest first
 state: active-development # released | active-development | experimental | archived | planned
 stateNote: One honest sentence about where it stands.
 accent: '#5cf2c8' # page accent colour; check contrast against the dark background
-motif: trace # scanner | crt | trace (the decorative strip on the project page)
+motif: trace # scanner | crt | trace | orbit (the decorative strip on the project page)
 # icon: { src: /media/icons/my-project.png, alt: My Project app icon }
 category: [Android]
 platforms: [Android phone]

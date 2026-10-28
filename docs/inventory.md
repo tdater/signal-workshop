@@ -6,16 +6,17 @@ Repos or local workspaces were provided, so none were reviewed.
 
 ## Repositories inspected
 
-| Repository                      | What it is                                                   | Used for                                 |
-| ------------------------------- | ------------------------------------------------------------ | ---------------------------------------- |
-| tdater/KITT-Launcher.2          | KITT Launcher source (both editions build from it since 1.8) | Facts only; **never linked** (see below) |
-| tdater/RetroTV                  | RetroTV source                                               | Facts only; **never linked**             |
-| tdater/KITT-Launcher-releases   | Public releases + GitHub Pages site for the portrait edition | Releases, notes, screenshots, video      |
-| tdater/KITT-Launcher.2-releases | Public releases for the landscape edition                    | Releases, notes                          |
-| tdater/RetroTV-releases         | Public releases + Pages site                                 | Releases, banners, icon                  |
-| tdater/BLACKBOX-releases        | Public releases + Pages site for BLACKBOX and BLACKBOX Net   | Releases, notes                          |
-| tdater/tdater-BLACKBOX          | Empty repository                                             | Nothing                                  |
-| tdater/KnightRiderLauncher      | Retired predecessor (last v1.7)                              | Mentioned as history only, no downloads  |
+| Repository                      | What it is                                                   | Used for                                                                                 |
+| ------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| tdater/KITT-Launcher.2          | KITT Launcher source (both editions build from it since 1.8) | Facts only; **never linked** (see below)                                                 |
+| tdater/RetroTV                  | RetroTV source                                               | Facts only; **never linked**                                                             |
+| tdater/KITT-Launcher-releases   | Public releases + GitHub Pages site for the portrait edition | Releases, notes, screenshots, video                                                      |
+| tdater/KITT-Launcher.2-releases | Public releases for the landscape edition                    | Releases, notes                                                                          |
+| tdater/RetroTV-releases         | Public releases + Pages site                                 | Releases, banners, icon                                                                  |
+| tdater/BLACKBOX-releases        | Public releases + Pages site for BLACKBOX and BLACKBOX Net   | Releases, notes                                                                          |
+| tdater/tdater-BLACKBOX          | Empty repository                                             | Nothing                                                                                  |
+| tdater/KnightRiderLauncher      | Retired predecessor (last v1.7)                              | Mentioned as history only, no downloads                                                  |
+| tdater/aios                     | AIOS source (public, MIT); debug-signed APKs on its releases | Facts and sample-data screenshots only; **never linked**, no download (added 2026-10-28) |
 
 Existing app sites (tdater.github.io/KITT-Launcher-releases, /RetroTV-releases,
 /BLACKBOX-releases) were inspected for typography, palette and structure and not modified. They
@@ -24,11 +25,12 @@ single-page marketing layouts; this site deliberately uses none of those fonts o
 
 ## Projects on the site
 
-| Slug          | Title                        | State              | Platforms                      | Current release          | Media                                                                                     |
-| ------------- | ---------------------------- | ------------------ | ------------------------------ | ------------------------ | ----------------------------------------------------------------------------------------- |
-| kitt-launcher | KITT Launcher (+ Launcher.2) | released           | Android head units             | 1.8 (both editions)      | Owner's published screenshots + 2 silent clips, captured in emulator demo mode (labelled) |
-| retrotv       | RetroTV                      | released           | Android TV, Google TV, Fire TV | 1.2                      | Real banners and icon only; no screenshots published by owner                             |
-| blackbox      | BLACKBOX (+ BLACKBOX Net)    | active-development | Android 10+ phones, foldables  | 0.2.1 beta (both builds) | None (honest empty state)                                                                 |
+| Slug          | Title                        | State              | Platforms                      | Current release           | Media                                                                                     |
+| ------------- | ---------------------------- | ------------------ | ------------------------------ | ------------------------- | ----------------------------------------------------------------------------------------- |
+| kitt-launcher | KITT Launcher (+ Launcher.2) | released           | Android head units             | 1.8 (both editions)       | Owner's published screenshots + 2 silent clips, captured in emulator demo mode (labelled) |
+| retrotv       | RetroTV                      | released           | Android TV, Google TV, Fire TV | 1.2                       | Real banners and icon only; no screenshots published by owner                             |
+| blackbox      | BLACKBOX (+ BLACKBOX Net)    | active-development | Android 10+ phones, foldables  | 0.2.1 beta (both builds)  | None (honest empty state)                                                                 |
+| aios          | AIOS                         | active-development | Windows 11 (+ Android client)  | None offered (debug only) | 7 sample-data renders from the repo's screenshot script (interface v0.2.0), labelled      |
 
 Full capabilities, requirements, permissions, limitations and Decision Trail entries with their
 evidence are in each `src/content/projects/*.yaml`; each file's `internal.sources` says where
@@ -70,3 +72,19 @@ are safe or work on a given device. Signing certificates were not inspected.
   needs Travis (see [owner-review.md](owner-review.md)).
 - Whether Travis has registered for Android developer verification is unknown; the guides explain
   the change without claiming either way.
+
+## Survey update 2026-10-28
+
+Checked every repository the `tdater` account exposes (all public). Changes since 2026-10-23:
+
+- **New: tdater/aios** (created 2026-10-24, v0.6.0 in its changelog, releases v0.3.0–v0.5.0 are
+  debug-signed APKs). Added as a project page with no download; see owner-review item 7.
+- **KITT Launcher / KITT Launcher.2 v1.9** (2026-10-23): music library, recently played, play by
+  voice, return from the radio screen. New captures used: both library shots, 11 film-edition
+  shots + the film-editions clip, stream, games, quick settings, KITT Launcher.2 AI page. The
+  Future War edition has no capture (left out of the owner's capture run).
+- **RetroTV v1.3 and v1.4** (2026-10-23). Still no in-app screenshots published.
+- **BLACKBOX**: no change. `tdater-BLACKBOX` is still an empty initial commit.
+
+All 19 release artifacts (including the new 1.9 ×2, 1.3 and 1.4) were downloaded anonymously on
+2026-10-28 and matched GitHub's SHA-256 digests (`npm run verify:downloads -- --all`).

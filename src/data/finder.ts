@@ -26,10 +26,16 @@ export const problems = [
     tags: ['handoff'],
   },
   { id: 'offline', label: 'It has to work without a signal', tags: ['offline'] },
+  {
+    id: 'ai-one-place',
+    label: 'I want my AIs, notes and projects in one place on my own PC',
+    tags: ['local-first'],
+  },
 ] as const;
 
 export const platformFilters = [
   { id: 'head-unit', label: 'Car head unit', match: 'Android head unit' },
   { id: 'tv', label: 'TV', match: ['Android TV', 'Google TV', 'Fire TV'] },
   { id: 'phone', label: 'Phone or foldable', match: ['Android phone', 'Foldable'] },
+  { id: 'pc', label: 'Windows PC', match: 'Windows 11' },
 ] as const;

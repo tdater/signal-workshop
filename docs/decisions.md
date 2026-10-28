@@ -41,7 +41,7 @@ front of `/admin` and `/api/admin/*` if Travis wants it later; it's free for sma
 ## 2026-10-23 Visual direction "Signal Workshop"
 
 Near-black surfaces, one mint signal colour for the site, a yellow focus ring, and per-project
-accents with a motif (KITT red scanner, RetroTV magenta CRT, BLACKBOX orange trace). Type is
+accents with a motif (KITT red scanner, RetroTV magenta CRT, BLACKBOX orange trace, AIOS blue orbit). Type is
 Bricolage Grotesque (display), Atkinson Hyperlegible Next (body, chosen for legibility) and
 JetBrains Mono (data such as versions and hashes). A persisted "low glow" toggle and
 `prefers-reduced-motion` turn off glow and animation. Chosen to be clearly different from the

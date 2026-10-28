@@ -7,6 +7,7 @@ const routes = [
   '/projects/kitt-launcher',
   '/projects/retrotv',
   '/projects/blackbox',
+  '/projects/aios',
   '/guides',
   '/guides/install-retrotv',
   '/faq',
@@ -74,7 +75,7 @@ test('project library filters and handles empty results', async ({ page }) => {
   await expect(page.getByText('No projects match those filters.')).toBeVisible();
   await page.getByLabel('Search projects').fill('');
   await page.getByRole('button', { name: 'Active development' }).click();
-  await expect(page.locator('.pcard:visible h2')).toHaveText(['BLACKBOX']);
+  await expect(page.locator('.pcard:visible h2')).toHaveText(['BLACKBOX', 'AIOS']);
 });
 
 test('screenshot viewer traps focus, steps, and returns focus on Escape', async ({ page }) => {
@@ -107,19 +108,57 @@ test('BLACKBOX shows an honest no-media state', async ({ page }) => {
   await expect(page.locator('#media img')).toHaveCount(0);
 });
 
+test('AIOS shows real media and an honest no-release state, never a source link', async ({
+  page,
+}) => {
+  await page.goto('/projects/aios');
+  await expect(page.locator('#no-release')).toContainText('No release yet');
+  await expect(page.locator('#media img').first()).toBeVisible();
+  await expect(page.getByText('invented sample data').first()).toBeVisible();
+  await expect(page.locator('a[href*="github.com/tdater/aios"]')).toHaveCount(0);
+  await expect(page.locator('a[href$=".apk"]')).toHaveCount(0);
+  await expect(page.locator('#setup')).toHaveCount(0);
+  await page.goto('/downloads');
+  await expect(page.getByText('No release is available for AIOS right now.')).toBeVisible();
+});
+
+test('KITT Launcher shows the 1.9 releases, music library and film editions', async ({ page }) => {
+  await page.goto('/projects/kitt-launcher');
+  await expect(page.locator('#passport-kitt-launcher-kitt-1-9')).toContainText(
+    'KITT-Launcher-v1.9.apk',
+  );
+  await expect(page.locator('#passport-kitt-launcher-kitt2-1-9')).toContainText(
+    'KITT-Launcher.2-v1.9.apk',
+  );
+  await expect(page.getByRole('heading', { name: 'Film editions', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'New in 1.9: music library' })).toBeVisible();
+  await expect(page.locator('img[src*="l2-edition-hillvalley2015"]')).toHaveCount(1);
+});
+
+test('the finder matches AIOS to its problem and the Windows platform', async ({ page }) => {
+  await page.goto('/');
+  const finder = page.locator('[data-finder]');
+  await finder.getByRole('button', { name: /my AIs, notes and projects in one place/ }).click();
+  const results = finder.locator('[data-results]');
+  await expect(results.getByRole('link', { name: 'AIOS', exact: true })).toBeVisible();
+  await finder.getByRole('button', { name: 'Windows PC' }).click();
+  await expect(results.getByRole('link', { name: 'AIOS', exact: true })).toBeVisible();
+  await expect(results.getByRole('link', { name: 'RetroTV', exact: true })).toHaveCount(0);
+});
+
 test('download passport shows release metadata from one record', async ({ page }) => {
   await page.goto('/downloads');
-  const passport = page.locator('#passport-retrotv-1-2');
+  const passport = page.locator('#passport-retrotv-1-4');
   await expect(passport.getByRole('link', { name: /Download APK/ })).toHaveAttribute(
     'href',
-    'https://github.com/tdater/RetroTV-releases/releases/download/v1.2/RetroTV-v1.2.apk',
+    'https://github.com/tdater/RetroTV-releases/releases/download/v1.4/RetroTV-v1.4.apk',
   );
   await expect(passport).toContainText(
-    '42558c0d7863c3436040af88ead404b6dd92e30b6d4e038000ad65cce70c094b',
+    '8c8566d4218d8e9a3d42999bf61030009edd136779e529b4933f9ffb50732513',
   );
-  await expect(passport).toContainText('RetroTV-v1.2.apk');
+  await expect(passport).toContainText('RetroTV-v1.4.apk');
   await expect(
-    passport.getByRole('img', { name: /QR code for the RetroTV 1.2 download link/ }),
+    passport.getByRole('img', { name: /QR code for the RetroTV 1.4 download link/ }),
   ).toBeVisible();
   await expect(page.locator('#passport-blackbox-0-2-1')).toContainText('Early release');
 });
@@ -127,10 +166,10 @@ test('download passport shows release metadata from one record', async ({ page }
 test('copy link uses the clipboard', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('/downloads');
-  const passport = page.locator('#passport-retrotv-1-2');
+  const passport = page.locator('#passport-retrotv-1-4');
   await passport.getByRole('button', { name: 'Copy link' }).click();
   await expect(passport.getByRole('button', { name: 'Copied' })).toBeVisible();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('RetroTV-v1.2.apk');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('RetroTV-v1.4.apk');
 });
 
 test('setup trail saves progress locally and resets', async ({ page }) => {
@@ -275,8 +314,8 @@ test('core content works without JavaScript', async ({ browser }) => {
   await page.goto('/');
   await expect(page.locator('.finder__static')).toBeVisible();
   await page.goto('/downloads');
-  await expect(page.locator('#passport-retrotv-1-2 .passport__url')).toHaveValue(
-    /RetroTV-v1.2.apk/,
+  await expect(page.locator('#passport-retrotv-1-4 .passport__url')).toHaveValue(
+    /RetroTV-v1.4.apk/,
   );
   await page.goto('/projects/kitt-launcher');
   await expect(page.locator('#site-nav')).toBeVisible();
